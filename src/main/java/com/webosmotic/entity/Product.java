@@ -35,10 +35,10 @@ public class Product extends BaseEntity implements Serializable {
 	@Column(name = "price")
 	private Float price;
 
-	@Column(name = "long_desc")
+	@Column(name = "description")
 	@Type(type = "text")
 	@NotBlank
-	private String longDesc;
+	private String description;
 
 	@Column(name = "sku")
 	@NotBlank
@@ -60,6 +60,13 @@ public class Product extends BaseEntity implements Serializable {
 	@Column(name = "sell_count")
 	@JsonIgnore
 	private Integer sellCount;
+	
+	@Column(columnDefinition = "BOOLEAN")
+	private boolean showTag;
+	
+	private String brand;
+	
+	private int discount;
 
 	public ProductCategory getProductCategory() {
 		return productCategory;
@@ -117,14 +124,6 @@ public class Product extends BaseEntity implements Serializable {
 		this.taxPercent = taxPercent;
 	}
 
-	public String getLongDesc() {
-		return longDesc;
-	}
-
-	public void setLongDesc(String longDesc) {
-		this.longDesc = longDesc;
-	}
-
 	public String getImage() {
 		return image;
 	}
@@ -141,11 +140,37 @@ public class Product extends BaseEntity implements Serializable {
 		this.sellCount = sellCount;
 	}
 
+	public boolean isShowTag() {
+		return showTag;
+	}
+
+	public void setShowTag(boolean showTag) {
+		this.showTag = showTag;
+	}
+
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
+	public int getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(int discount) {
+		this.discount = discount;
+	}
+
 	@Override
 	public String toString() {
-		return "Product [productCategory=" + productCategory + ", name=" + name + ", price=" + price + ", SKU=" + SKU
-				+ ", stock=" + stock + ", shippingPrice=" + shippingPrice + ", taxPercent=" + taxPercent + ", cartDesc="
-				+ ", longDesc=" + longDesc + ", image=" + image + ", sellCount=" + sellCount + ", creationDate="
-				+ creationDate + ", lastModifiedDate=" + lastModifiedDate + "]";
+		return "Product [productCategory=" + productCategory + ", name=" + name + ", price=" + price + ", longDesc="
+				+ description + ", SKU=" + SKU + ", stock=" + stock + ", shippingPrice=" + shippingPrice + ", taxPercent="
+				+ taxPercent + ", image=" + image + ", sellCount=" + sellCount + ", showTag=" + showTag + ", brand="
+				+ brand + ", discount=" + discount + "]";
 	}
+	
+	
 }

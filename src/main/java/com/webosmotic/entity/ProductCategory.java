@@ -5,9 +5,6 @@ import java.io.Serializable;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -18,34 +15,24 @@ public class ProductCategory extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
-	
-	@Column(name = "name")
 	@NotBlank
-	private String name;
+	private String parentCategory;
+	@NotBlank
+	private String subCategory;
 
-	public Long getId() {
-		return id;
+	public String getParentCategory() {
+		return parentCategory;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setParentCategory(String parentCategory) {
+		this.parentCategory = parentCategory;
 	}
 
-	public String getName() {
-		return name;
+	public String getSubCategory() {
+		return subCategory;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Override
-	public String toString() {
-		return "ProductCategory [id=" + id + ", name=" + name + ", creationDate=" + creationDate + ", lastModifiedDate="
-				+ lastModifiedDate + "]";
+	public void setSubCategory(String subCategory) {
+		this.subCategory = subCategory;
 	}
 }

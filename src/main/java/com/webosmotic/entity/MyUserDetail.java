@@ -19,6 +19,7 @@ public class MyUserDetail implements UserDetails, OAuth2User, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	private Long id;
 	private String userName;
 	private String password;
 	private String email;
@@ -28,11 +29,11 @@ public class MyUserDetail implements UserDetails, OAuth2User, Serializable {
 	private Map<String, Object> attributes;
 
 	public MyUserDetail(User user) {
-		System.out.println("userDetails::" + user);
+		this.id = user.getId();
 		this.userName = user.getUsername();
 		this.password = user.getPassword();
 		this.enable = user.getEnable();
-		this.email = user.getEmail();
+		this.setEmail(user.getEmail());
 		this.name = user.getName();
 		this.authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName().name()))
 				.collect(Collectors.toList());
@@ -95,5 +96,21 @@ public class MyUserDetail implements UserDetails, OAuth2User, Serializable {
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

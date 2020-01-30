@@ -4,24 +4,21 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.commerce.backend.model.ProductDisplay;
-import com.commerce.backend.service.ProductCategoryService;
-import com.commerce.backend.service.ProductDisplayService;
-import com.nimbusds.oauth2.sdk.Response;
 import com.webosmotic.entity.Product;
-import com.webosmotic.entity.ProductCategory;
+import com.webosmotic.exception.AppException;
 import com.webosmotic.pojo.ApiResponse;
 import com.webosmotic.pojo.ErrorResponse;
+import com.webosmotic.pojo.ProductDisplay;
+import com.webosmotic.pojo.ProductSearchCriteria;
 import com.webosmotic.service.ProductService;
 
 @RestController("/product")
@@ -29,41 +26,73 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+    
+    /* 
+     * API to fetch the random products
+     * @return Product list
+     */	
+	@RequestMapping(value = "/product/show", method = RequestMethod.GET)
+	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getShowProducts() {
+		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
+		try {
+			List<ProductDisplay> products = productService.fetchShowProducts();
+			response.setSuccess(true);
+			response.setData(products);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			throw new AppException(e.getMessage());
+		}
+	}
 
-	/*
-	 * @RequestMapping(value = "/product/category", method = RequestMethod.GET)
-	 * public ResponseEntity getProductsByCategory (@RequestParam("page") Integer
-	 * page,
-	 * 
-	 * @RequestParam("size") Integer size,
-	 * 
-	 * @RequestParam(value = "sort", required = false) String sort,
-	 * 
-	 * @RequestParam(value = "category", required = false) String category) {
-	 * 
-	 * if (page == null || size == null) { throw new
-	 * IllegalArgumentException("Page and size parameters are required"); }
-	 * PageRequest pageRequest; if (sort != null && !isBlank(sort)) { Sort
-	 * sortRequest = getSort(sort); if (sortRequest == null) { throw new
-	 * IllegalArgumentException("Invalid sort parameter"); } pageRequest =
-	 * PageRequest.of(page, size, sortRequest); } else { pageRequest =
-	 * PageRequest.of(page, size); }
-	 * 
-	 * if (category != null && !isBlank(category)) { ProductCategory productCategory
-	 * = productCategoryService.findByName(category); if (productCategory == null) {
-	 * throw new IllegalArgumentException("Invalid category parameter"); } List
-	 * returnList = productDisplayService.findAllByProductCategory(pageRequest,
-	 * productCategory); return new ResponseEntity<List>(returnList, HttpStatus.OK);
-	 * }
-	 * 
-	 * List returnList = productDisplayService.findAll(pageRequest); return new
-	 * ResponseEntity<>(returnList, HttpStatus.OK); }
-	 */
+    /* 
+     * API to fetch the products for the given product category
+     * @QueryParam Integer offset , Integer size, String sort, String category
+     * @return Product list
+     */	
+	@RequestMapping(value = "/product/category", method = RequestMethod.GET)
+	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getProductsByCategory(
+			@RequestParam(name = "offset", defaultValue = "0") int offset,
+			@RequestParam(name = "size", defaultValue = "25") int size,
+			@RequestParam(name = "sort", defaultValue = "name") String sort,
+			@RequestParam(value = "category", required = false) String category) {
+		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
+		try {
+			List<ProductDisplay> products = productService.findCategoryProducts(offset, size, sort, category);
+			response.setSuccess(true);
+			response.setData(products);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			throw new AppException(e.getMessage());
+		}
+	}
+	
+	/* 
+     * API to fetch the products based on the search criteria
+     * @QueryParam Integer offset , Integer size, String sort, ProductSearch searchCriteria
+     * @return Product list
+     */	
+	@RequestMapping(value = "/product/search", method = RequestMethod.GET)
+	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getProductsBykeyword(
+			@RequestParam(name = "offset", defaultValue = "0") int offset,
+			@RequestParam(name = "size", defaultValue = "25") int size,
+			@RequestParam(name = "sort", defaultValue = "name") String sort,
+			@RequestBody ProductSearchCriteria searchCriteria) {
+		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
+		try {
+			List<ProductDisplay> products = productService.SearchProducts(offset, size, sort, searchCriteria);
+			response.setSuccess(true);
+			response.setData(products);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			throw new AppException(e.getMessage());
+		}
+	}
 
-    /* API to fetch the product detail based on productID
+    /* 
+     * API to fetch the full product detail based on productID
      * @Param Long Id
      * @return Product
-     * */
+     */
 	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET, params = "id")
 	public ResponseEntity<ApiResponse<Product>> getFullProductDetailsById(@PathVariable("id") Long id) {
 		ApiResponse<Product> response = new ApiResponse<>();
@@ -78,67 +107,58 @@ public class ProductController {
 					e.getMessage()));
 			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
 
-    }
+	/*
+	 * API to fetch the related products detail based on productID
+	 * @Param Long Id
+	 * @return List<Products>
+	 */
+	@RequestMapping(value = "/product/related", method = RequestMethod.GET, params = "id")
+	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getByRelatedProducts(@RequestParam("id") Long id) {
+		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
+		try {
+			Product productDisplay = productService.findById(id);
+			List<ProductDisplay> products = productService.getRelatedProducts(productDisplay.getProductCategory(), id);
+			response.setSuccess(true);
+			response.setData(products);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			throw new AppException(e.getMessage());
+		}
+	}
 
-    @RequestMapping(value = "/product/related", method = RequestMethod.GET, params = "id")
-    public ResponseEntity getByRelated(@RequestParam("id") Long id) {
-        ProductDisplay productDisplay = productDisplayService.findById(id);
-        if (productDisplay == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<List>(productDisplayService.getRelatedProducts(productDisplay.getProductCategory(), id), HttpStatus.OK);
-    }
+	/*
+	 * API to fetch the recently added products
+	 * @return List<Products>
+	 */
+	@RequestMapping(value = "/product/recent", method = RequestMethod.GET)
+	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getByNewlyAdded() {
+		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
+		try {
+			List<ProductDisplay> products = productService.findTop8ByOrderByDateCreatedDesc();
+			response.setSuccess(true);
+			response.setData(products);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			throw new AppException(e.getMessage());
+		}
+	}
 
-    @RequestMapping(value = "/product/recent", method = RequestMethod.GET)
-    public ResponseEntity getByNewlyAdded() {
-        List returnList = productDisplayService.findTop8ByOrderByDateCreatedDesc();
-        return new ResponseEntity<List>(returnList, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/product/mostselling", method = RequestMethod.GET)
-    public ResponseEntity getByMostSelling() {
-        List returnList = productDisplayService.findTop8ByOrderBySellCountDesc();
-        return new ResponseEntity<List>(returnList, HttpStatus.OK);
-    }
-
-
-    //TODO rebuild the logic
-    @RequestMapping(value = "/product/interested", method = RequestMethod.GET)
-    public ResponseEntity getByInterested() {
-        List returnList = productDisplayService.findTop8ByOrderBySellCountDesc();
-        return new ResponseEntity<List>(returnList, HttpStatus.OK);
-    }
-
-
-    @RequestMapping(value = "/product/search", method = RequestMethod.GET, params = {"page", "size", "keyword"})
-    public ResponseEntity searchProduct(@RequestParam("page") Integer page,
-                                        @RequestParam("size") Integer size,
-                                        @RequestParam("keyword") String keyword) {
-        List returnList = productDisplayService.searchProducts(keyword, page, size);
-        return new ResponseEntity<List>(returnList, HttpStatus.OK);
-    }
-
-    private boolean isBlank(String param) {
-        return param.isEmpty() || param.trim().equals("");
-    }
-
-
-    //A better way to do this is storing sorting options in the database
-    //and sending those options to the client. Later then the client
-    //sends the parameter based upon that.
-    private Sort getSort(String sort) {
-        switch (sort) {
-            case "lowest":
-                return Sort.by(Sort.Direction.ASC, "price");
-            case "highest":
-                return Sort.by(Sort.Direction.DESC, "price");
-            case "name":
-                return Sort.by(Sort.Direction.ASC, "name");
-            default:
-                return null;
-        }
-    }
-
-
+	/*
+	 * API to fetch the most selling products
+	 * @return List<Products>
+	 */
+	@RequestMapping(value = "/product/mostselling", method = RequestMethod.GET)
+	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getByMostSelling() {
+		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
+		try {
+			List<ProductDisplay> products = productService.findTop8ByOrderBySellCountDesc();
+			response.setSuccess(true);
+			response.setData(products);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			throw new AppException(e.getMessage());
+		}
+	}
 }

@@ -1,14 +1,15 @@
 package com.webosmotic.pojo;
 
+import com.webosmotic.entity.ProductCategory;
+
 public class ProductDisplay {
 	
 	private Long Id;
 	private String name;
 	private Float price;
 	private String images;
-	private String category;
+	private ProductCategory category;
 	private Integer sellCount;
-	private Float stock;
 	private Float shippingPrice;
 	
 	public Long getId() {
@@ -35,28 +36,23 @@ public class ProductDisplay {
 	public void setImages(String images) {
 		this.images = images;
 	}
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
-	}
+	
 	public Integer getSellCount() {
 		return sellCount;
 	}
 	public void setSellCount(Integer sellCount) {
 		this.sellCount = sellCount;
 	}
-	public Float getStock() {
-		return stock;
-	}
-	public void setStock(Float stock) {
-		this.stock = stock;
-	}
 	public Float getShippingPrice() {
 		return shippingPrice;
 	}
 	public void setShippingPrice(Float shippingPrice) {
 		this.shippingPrice = shippingPrice;
+	}
+	public ProductCategory getCategory() {
+		return category;
+	}
+	public void setCategory(ProductCategory category) {
+		this.category = category;
 	}
 }

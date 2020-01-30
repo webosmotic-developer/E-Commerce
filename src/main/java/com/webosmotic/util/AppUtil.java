@@ -2,8 +2,14 @@ package com.webosmotic.util;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
+
+import com.webosmotic.entity.Product;
+import com.webosmotic.pojo.ApiResponse;
+import com.webosmotic.pojo.ProductDisplay;
 
 /**
  * Util class for Application
@@ -34,5 +40,20 @@ public class AppUtil {
 		LocalDateTime currentDateTime = LocalDateTime.now(ZoneOffset.UTC);
 		LocalDateTime nextTime = currentDateTime.plusHours(hours);
 		return nextTime;
+	}
+	
+	public static List<ProductDisplay> createProductDisplay(List<Product> products) {
+		List<ProductDisplay> productDisplays = new ArrayList<>();
+		products.forEach(p -> {
+			ProductDisplay display = new ProductDisplay();
+			display.setCategory(p.getProductCategory());
+			display.setImages(p.getImage());
+			display.setName(p.getName());
+			display.setPrice(p.getPrice());
+			display.setSellCount(p.getSellCount());
+			display.setShippingPrice(p.getShippingPrice());
+			productDisplays.add(display);
+		});
+		return productDisplays;
 	}
 }
