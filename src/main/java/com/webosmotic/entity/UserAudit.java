@@ -15,25 +15,25 @@ public abstract class UserAudit extends BaseEntity implements Serializable{
 
 	@Column(name = "created_by")
     @CreatedBy
-    private String createdBy;
+    private int createdBy;
  
     @Column(name = "modified_by")
     @LastModifiedBy
-    private String modifiedBy;
+    private int modifiedBy;
 
-	public String getCreatedBy() {
+	public int getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(int createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public String getModifiedBy() {
+	public int getModifiedBy() {
 		return modifiedBy;
 	}
 
-	public void setModifiedBy(String modifiedBy) {
+	public void setModifiedBy(int modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 }

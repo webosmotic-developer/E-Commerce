@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
 import com.webosmotic.entity.Product;
 import com.webosmotic.entity.ProductCategory;
 import com.webosmotic.exception.AppException;
@@ -18,7 +20,7 @@ import com.webosmotic.repository.ProductCategoryRepository;
 import com.webosmotic.repository.ProductRepository;
 import com.webosmotic.specification.ProductSpecification;
 import com.webosmotic.util.AppUtil;
-
+@Service
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
@@ -75,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<ProductDisplay> fetchShowProducts() {
 		try {
-			List<Product> products = productRepository.findProductsByShowTagsOrderByNameAsc(true);
+			List<Product> products = productRepository.findProductsByShowTagOrderByNameAsc(true);
 			return AppUtil.createProductDisplay(products);
 		} catch (Exception e) {
 			throw new AppException(e.getMessage());

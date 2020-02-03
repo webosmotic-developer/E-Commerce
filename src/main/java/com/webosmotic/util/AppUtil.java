@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.webosmotic.entity.Product;
-import com.webosmotic.pojo.ApiResponse;
 import com.webosmotic.pojo.ProductDisplay;
 
 /**
@@ -49,9 +48,10 @@ public class AppUtil {
 			display.setCategory(p.getProductCategory());
 			display.setImages(p.getImage());
 			display.setName(p.getName());
-			display.setPrice(p.getPrice());
+			display.setPrice(p.getUnitPrice());
 			display.setSellCount(p.getSellCount());
 			display.setShippingPrice(p.getShippingPrice());
+			display.setDiscount(p.getDiscount());
 			productDisplays.add(display);
 		});
 		return productDisplays;

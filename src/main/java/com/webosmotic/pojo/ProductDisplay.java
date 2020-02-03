@@ -11,6 +11,7 @@ public class ProductDisplay {
 	private ProductCategory category;
 	private Integer sellCount;
 	private Float shippingPrice;
+	private Float discount;
 	
 	public Long getId() {
 		return Id;
@@ -54,5 +55,11 @@ public class ProductDisplay {
 	}
 	public void setCategory(ProductCategory category) {
 		this.category = category;
+	}
+	public Float getDiscount() {
+		return discount;
+	}
+	public void setDiscount(Float discount) {
+		this.discount = discount;
 	}
 }

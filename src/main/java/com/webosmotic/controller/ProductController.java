@@ -31,7 +31,7 @@ public class ProductController {
      * API to fetch the random products
      * @return Product list
      */	
-	@RequestMapping(value = "/product/show", method = RequestMethod.GET)
+	@RequestMapping(value = "/show", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getShowProducts() {
 		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
 		try {
@@ -49,7 +49,7 @@ public class ProductController {
      * @QueryParam Integer offset , Integer size, String sort, String category
      * @return Product list
      */	
-	@RequestMapping(value = "/product/category", method = RequestMethod.GET)
+	@RequestMapping(value = "/category", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getProductsByCategory(
 			@RequestParam(name = "offset", defaultValue = "0") int offset,
 			@RequestParam(name = "size", defaultValue = "25") int size,
@@ -71,7 +71,7 @@ public class ProductController {
      * @QueryParam Integer offset , Integer size, String sort, ProductSearch searchCriteria
      * @return Product list
      */	
-	@RequestMapping(value = "/product/search", method = RequestMethod.GET)
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getProductsBykeyword(
 			@RequestParam(name = "offset", defaultValue = "0") int offset,
 			@RequestParam(name = "size", defaultValue = "25") int size,
@@ -93,7 +93,7 @@ public class ProductController {
      * @Param Long Id
      * @return Product
      */
-	@RequestMapping(value = "/product/{id}", method = RequestMethod.GET, params = "id")
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET, params = "id")
 	public ResponseEntity<ApiResponse<Product>> getFullProductDetailsById(@PathVariable("id") Long id) {
 		ApiResponse<Product> response = new ApiResponse<>();
 		try {
@@ -114,7 +114,7 @@ public class ProductController {
 	 * @Param Long Id
 	 * @return List<Products>
 	 */
-	@RequestMapping(value = "/product/related", method = RequestMethod.GET, params = "id")
+	@RequestMapping(value = "/related", method = RequestMethod.GET, params = "id")
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getByRelatedProducts(@RequestParam("id") Long id) {
 		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
 		try {
@@ -132,7 +132,7 @@ public class ProductController {
 	 * API to fetch the recently added products
 	 * @return List<Products>
 	 */
-	@RequestMapping(value = "/product/recent", method = RequestMethod.GET)
+	@RequestMapping(value = "/recent", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getByNewlyAdded() {
 		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
 		try {
@@ -149,7 +149,7 @@ public class ProductController {
 	 * API to fetch the most selling products
 	 * @return List<Products>
 	 */
-	@RequestMapping(value = "/product/mostselling", method = RequestMethod.GET)
+	@RequestMapping(value = "/mostselling", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getByMostSelling() {
 		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
 		try {

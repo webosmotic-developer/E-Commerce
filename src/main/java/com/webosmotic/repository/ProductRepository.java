@@ -20,5 +20,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> , JpaSpe
 
 	List<Product> findByProductCategoryOrderByNameDesc (ProductCategory productCategory, Pageable pageRequest);
 
-	List<Product> findProductsByShowTagsOrderByNameAsc(boolean b);
+	List<Product> findProductsByShowTagOrderByNameAsc(boolean b);
 }

@@ -32,8 +32,8 @@ public class Product extends BaseEntity implements Serializable {
 	@NotBlank
 	private String name;
 
-	@Column(name = "price")
-	private Float price;
+	@Column(name = "unit_price")
+	private Float unitPrice;
 
 	@Column(name = "description")
 	@Type(type = "text")
@@ -66,7 +66,9 @@ public class Product extends BaseEntity implements Serializable {
 	
 	private String brand;
 	
-	private int discount;
+	private float discount;
+	
+	private String seller;
 
 	public ProductCategory getProductCategory() {
 		return productCategory;
@@ -84,13 +86,7 @@ public class Product extends BaseEntity implements Serializable {
 		this.name = name;
 	}
 
-	public Float getPrice() {
-		return price;
-	}
 
-	public void setPrice(Float price) {
-		this.price = price;
-	}
 
 	public String getSKU() {
 		return SKU;
@@ -156,20 +152,36 @@ public class Product extends BaseEntity implements Serializable {
 		this.brand = brand;
 	}
 
-	public int getDiscount() {
+	public float getDiscount() {
 		return discount;
 	}
 
-	public void setDiscount(int discount) {
+	public void setDiscount(float discount) {
 		this.discount = discount;
 	}
 
 	@Override
 	public String toString() {
-		return "Product [productCategory=" + productCategory + ", name=" + name + ", price=" + price + ", longDesc="
+		return "Product [productCategory=" + productCategory + ", name=" + name + ", price=" + unitPrice + ", longDesc="
 				+ description + ", SKU=" + SKU + ", stock=" + stock + ", shippingPrice=" + shippingPrice + ", taxPercent="
 				+ taxPercent + ", image=" + image + ", sellCount=" + sellCount + ", showTag=" + showTag + ", brand="
 				+ brand + ", discount=" + discount + "]";
+	}
+
+	public Float getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(Float unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+
+	public String getSeller() {
+		return seller;
+	}
+
+	public void setSeller(String seller) {
+		this.seller = seller;
 	}
 	
 	
