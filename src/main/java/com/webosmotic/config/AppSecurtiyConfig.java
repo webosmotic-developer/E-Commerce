@@ -60,7 +60,7 @@ public class AppSecurtiyConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.authorizeRequests().antMatchers("/auth/**").permitAll()
-				.antMatchers("/api/users/**", "/quotes", "/oauth2Redirect", "/aboutus", "/contactus", "/savedquotes")
+				.antMatchers("/api/users/**", "/")
 				.permitAll()
 
 				.anyRequest().authenticated();
