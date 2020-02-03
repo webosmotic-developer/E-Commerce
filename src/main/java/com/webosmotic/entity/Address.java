@@ -2,6 +2,8 @@ package com.webosmotic.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -13,6 +15,7 @@ import javax.persistence.ManyToOne;
  */
 
 @Entity
+@AttributeOverride(name = "Id", column = @Column(name = "address_id"))
 public class Address extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -6,7 +6,7 @@ import com.webosmotic.entity.ProductCategory;
 
 public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Long>{
 
-	ProductCategory findByName(String category);
+	//ProductCategory findByName(String category);
 	
 	
 

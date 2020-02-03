@@ -14,7 +14,6 @@ import com.webosmotic.entity.User;
 import com.webosmotic.repository.RoleRepository;
 import com.webosmotic.repository.UserRepository;
 import com.webosmotic.social.modal.AuthProvider;
-import com.webosmotic.util.AppUtil;
 
 /**
  * Service class for User
@@ -28,9 +27,7 @@ public class UserServiceImpl implements UserService {
 	PasswordEncoder passwordEncoder;
 	@Autowired
 	RoleRepository roleRepository;
-	@Autowired
-	AppUtil apputils;
-
+	
 	/*
 	 * Method to check the if the email is already exists
 	 * @Param String email

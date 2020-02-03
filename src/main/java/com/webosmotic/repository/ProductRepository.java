@@ -12,13 +12,13 @@ import com.webosmotic.specification.ProductSpecification;
 
 public interface ProductRepository extends JpaRepository<Product, Long> , JpaSpecificationExecutor<ProductSpecification>{
 
-	List<Product> findByProductCategoryAndIdNotOrderBySellCountDesc(ProductCategory productCategory, Long id);
+//	List<Product> findByProductCategoryAndProduct_idNotOrderBySellCountDesc(ProductCategory productCategory, Long id);
 
-	List<Product> findTop8ByOrderByDateCreatedDesc();
-
-	List<Product> findTop8ByOrderBySellCountDesc();
-
-	List<Product> findByProductCategoryOrderByNameDesc (ProductCategory productCategory, Pageable pageRequest);
-
-	List<Product> findProductsByShowTagOrderByNameAsc(boolean b);
+//	List<Product> findTop8ByOrderByCreationDateDesc();
+//
+//	List<Product> findTop8ByOrderBySellCountDesc();
+//
+//	List<Product> findByProductCategoryOrderByNameDesc (ProductCategory productCategory, Pageable pageRequest);
+//
+//	List<Product> findProductsByShowTagOrderByNameAsc(boolean b);
 }

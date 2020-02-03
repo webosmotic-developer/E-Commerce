@@ -6,6 +6,6 @@ import com.webosmotic.entity.Cart;
 
 public interface CartRepository extends JpaRepository<Cart, Long>{
 
-	Cart findbyCreatedBy(Long id);
+	//Cart findbyCreatedBy(Long id);
 
 }
