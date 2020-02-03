@@ -14,4 +14,6 @@ public interface CartService {
 
 	Cart updateCartItemInCart(CartItem item);
 
+	Cart createOrderForCart(MyUserDetail user, Long cartId);
+
 }

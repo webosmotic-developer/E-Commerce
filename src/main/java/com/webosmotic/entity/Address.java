@@ -24,6 +24,7 @@ public class Address extends BaseEntity implements Serializable {
 	private String phone;
 	private String zipCode;
 	private String landmark;
+	private Boolean isDefault;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
@@ -83,6 +84,22 @@ public class Address extends BaseEntity implements Serializable {
 
 	public void setLandmark(String landmark) {
 		this.landmark = landmark;
+	}
+
+	public Boolean getIsDefault() {
+		return isDefault;
+	}
+
+	public void setIsDefault(Boolean isDefault) {
+		this.isDefault = isDefault;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

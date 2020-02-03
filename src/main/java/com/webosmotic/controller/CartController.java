@@ -83,5 +83,23 @@ public class CartController {
 			throw new AppException(e.getMessage());
 		}
 	}
+	
+	@RequestMapping(value = "/checkout/{id}", method = RequestMethod.GET)
+	public ResponseEntity<ApiResponse<Cart>> cartCheckOut(
+			@PathVariable("id") Long cartId) {
+		ApiResponse<Cart> response = new ApiResponse<>();
+		try {
+			MyUserDetail user = (MyUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			if(user == null) {
+				throw new NotFoundException("No user found ");
+			}
+			Cart cart = cartService.createOrderForCart(user, cartId);
+			response.setSuccess(true);
+			response.setData(cart);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			throw new AppException(e.getMessage());
+		}
+	}
 
 }

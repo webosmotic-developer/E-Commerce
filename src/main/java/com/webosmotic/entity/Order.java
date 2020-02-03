@@ -46,6 +46,8 @@ public class Order extends UserAudit implements Serializable{
 	
 	private float shippingCharge;
 	
+	private float payableAmount;
+	
 	private LocalDate deliveryDate;
 
 	public Set<OrderDetails> getOrderDetailsList() {
@@ -118,5 +120,13 @@ public class Order extends UserAudit implements Serializable{
 
 	public void setDeliveryDate(LocalDate deliveryDate) {
 		this.deliveryDate = deliveryDate;
+	}
+
+	public float getPayableAmount() {
+		return payableAmount;
+	}
+
+	public void setPayableAmount(float payableAmount) {
+		this.payableAmount = payableAmount;
 	}
 }
