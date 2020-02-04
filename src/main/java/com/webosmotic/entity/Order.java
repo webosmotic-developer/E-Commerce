@@ -15,10 +15,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 
 @Entity
 @AttributeOverride(name = "Id", column = @Column(name = "order_id"))
+@Table (name = "order_info")
 public class Order extends UserAudit implements Serializable{
 
 	private static final long serialVersionUID = 1L;
