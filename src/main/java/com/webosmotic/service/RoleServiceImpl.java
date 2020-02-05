@@ -3,8 +3,8 @@ package com.webosmotic.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.webosmotic.Enum.RoleType;
 import com.webosmotic.entity.Role;
-import com.webosmotic.entity.RoleType;
 import com.webosmotic.repository.RoleRepository;
 
 /**

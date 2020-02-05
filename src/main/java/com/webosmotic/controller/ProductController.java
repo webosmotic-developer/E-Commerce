@@ -118,8 +118,7 @@ public class ProductController {
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getByRelatedProducts(@RequestParam("id") Long id) {
 		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
 		try {
-			Product productDisplay = productService.findById(id);
-			List<ProductDisplay> products = productService.getRelatedProducts(productDisplay.getProductCategory(), id);
+			List<ProductDisplay> products = productService.getRelatedProducts(id);
 			response.setSuccess(true);
 			response.setData(products);
 			return new ResponseEntity<>(response, HttpStatus.OK);
@@ -136,7 +135,7 @@ public class ProductController {
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getByNewlyAdded() {
 		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
 		try {
-			List<ProductDisplay> products = productService.findTop8ByOrderByDateCreatedDesc();
+			List<ProductDisplay> products = productService.findRecentlyAddedProduct();
 			response.setSuccess(true);
 			response.setData(products);
 			return new ResponseEntity<>(response, HttpStatus.OK);
@@ -153,7 +152,7 @@ public class ProductController {
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getByMostSelling() {
 		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
 		try {
-			List<ProductDisplay> products = productService.findTop8ByOrderBySellCountDesc();
+			List<ProductDisplay> products = productService.findMostSellingProducts();
 			response.setSuccess(true);
 			response.setData(products);
 			return new ResponseEntity<>(response, HttpStatus.OK);

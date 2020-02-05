@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "product_category")
-@AttributeOverride(name = "Id", column = @Column(name = "category_id"))
+@AttributeOverride(name = "id", column = @Column(name = "category_id"))
 public class ProductCategory extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;

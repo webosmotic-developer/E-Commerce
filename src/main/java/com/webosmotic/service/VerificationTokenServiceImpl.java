@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.webosmotic.Enum.TokenType;
 import com.webosmotic.controller.AuthController;
-import com.webosmotic.entity.TokenType;
 import com.webosmotic.entity.User;
 import com.webosmotic.entity.VerificationToken;
 import com.webosmotic.exception.AppException;

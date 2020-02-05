@@ -1,8 +1,10 @@
 package com.webosmotic.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,13 +15,13 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "cart")
+@AttributeOverride(name = "id", column = @Column(name = "cart_id"))
 public class Cart extends UserAudit implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @NotNull
-    private List<CartItem> cartItemList = new ArrayList<>();
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.PERSIST,  fetch = FetchType.EAGER)
+    private Set<ProductSummary> products = new HashSet<>();
 
     @Column(name = "total_price")
     @NotNull
@@ -28,14 +30,6 @@ public class Cart extends UserAudit implements Serializable {
     @Column(name = "total_Shipping_price")
     @NotNull
     private Float totalCargoPrice;
-
-	public List<CartItem> getCartItemList() {
-		return cartItemList;
-	}
-
-	public void setCartItemList(List<CartItem> cartItemList) {
-		this.cartItemList = cartItemList;
-	}
 
 	public Float getTotalPrice() {
 		return totalPrice;
@@ -52,4 +46,20 @@ public class Cart extends UserAudit implements Serializable {
 	public void setTotalCargoPrice(Float totalCargoPrice) {
 		this.totalCargoPrice = totalCargoPrice;
 	}
+
+	public Set<ProductSummary> getProducts() {
+		return products;
+	}
+
+	public void setProducts(Set<ProductSummary> products) {
+		this.products = products;
+	}
+
+	public void addProduct(ProductSummary summary) {
+		if(summary != null) {
+			products.add(summary);
+		}
+		summary.setCart(this);
+	}
+
 }

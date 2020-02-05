@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.webosmotic.Enum.TokenType;
+
 @Entity
 @Table(name = "verification_token")
 public class VerificationToken implements Serializable {

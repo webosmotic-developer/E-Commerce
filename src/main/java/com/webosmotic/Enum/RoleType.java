@@ -1,4 +1,4 @@
-package com.webosmotic.entity;
+package com.webosmotic.Enum;
 
 /**
  * Enum describing the different types of Role of the user.

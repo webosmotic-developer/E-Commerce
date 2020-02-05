@@ -1,14 +1,13 @@
 package com.webosmotic.entity;
 
-import java.util.Date;
+import java.time.Instant;
 
+import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -25,38 +24,37 @@ public abstract class BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Id;
+	private Long id;
 
 	@CreatedDate
-	@Temporal(TemporalType.TIMESTAMP)
-	protected Date creationDate;
+	@Column(nullable = false, updatable = false)
+	private Instant createdAt;
 
 	@LastModifiedDate
-	@Temporal(TemporalType.TIMESTAMP)
-	protected Date lastModifiedDate;
+	@Column(nullable = false)
+	private Instant updatedAt;
 
-	public Date getCreationDate() {
-		return creationDate;
+	public Instant getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
+	public void setCreatedAt(Instant createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Date getLastModifiedDate() {
-		return lastModifiedDate;
+	public Instant getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setLastModifiedDate(Date lastModifiedDate) {
-		this.lastModifiedDate = lastModifiedDate;
+	public void setUpdatedAt(Instant updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	public Long getId() {
-		return Id;
+		return id;
 	}
 
 	public void setId(Long id) {
-		Id = id;
+		this.id = id;
 	}
-
 }

@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.webosmotic.entity.TokenType;
+import com.webosmotic.Enum.TokenType;
 import com.webosmotic.entity.VerificationToken;
 
 public interface VerificationtokenRepository extends JpaRepository<VerificationToken, Long> {

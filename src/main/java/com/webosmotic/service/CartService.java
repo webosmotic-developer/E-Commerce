@@ -1,19 +1,28 @@
 package com.webosmotic.service;
 
 import com.webosmotic.entity.Cart;
-import com.webosmotic.entity.CartItem;
-import com.webosmotic.entity.MyUserDetail;
+import com.webosmotic.pojo.MyUserDetail;
+import com.webosmotic.pojo.ProductSummaryUpdateRequest;
 
 public interface CartService {
 
-	Cart addToCart(Long productId);
-
-	Cart removeFromCart(Long id);
-
 	Cart fecthUserCart(MyUserDetail user);
+	
+	Cart addToCart(Long productId, MyUserDetail userDetails);
 
-	Cart updateCartItemInCart(CartItem item);
+	Cart updateCartItemInCart(ProductSummaryUpdateRequest request);
 
-	Cart createOrderForCart(MyUserDetail user, Long cartId);
+	Cart removeProductFromCart(Long id);
+
+	Long createOrderForCart(MyUserDetail user, Long cartId);
+	
+
+//	Cart removeFromCart(Long id);
+//
+//	
+//
+//	
+//
+//	Cart createOrderForCart(MyUserDetail user, Long cartId);
 
 }

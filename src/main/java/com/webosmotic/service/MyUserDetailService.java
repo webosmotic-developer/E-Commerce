@@ -7,9 +7,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import com.webosmotic.entity.MyUserDetail;
 import com.webosmotic.entity.User;
 import com.webosmotic.exception.UserNotFoundException;
+import com.webosmotic.pojo.MyUserDetail;
 
 /**
  * Custom class to override the default UserdetailsService to fetch the User

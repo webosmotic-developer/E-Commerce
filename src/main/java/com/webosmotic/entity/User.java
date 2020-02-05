@@ -32,7 +32,7 @@ import com.webosmotic.social.modal.AuthProvider;
  */
 
 @Entity
-@AttributeOverride(name = "Id", column = @Column(name = "user_id"))
+@AttributeOverride(name = "id", column = @Column(name = "user_id"))
 public class User extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -66,7 +66,8 @@ public class User extends BaseEntity implements Serializable {
 	private List<Address> adresses = new ArrayList<>();
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL) // LAZY - no session ?? TODO troubleshoot
-	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
+	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"), 
+	inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 
 	public String getPassword() {

@@ -22,6 +22,8 @@ import com.webosmotic.repository.ProductRepository;
 import com.webosmotic.specification.ProductSpecification;
 import com.webosmotic.util.AppUtil;
 
+import javassist.NotFoundException;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -31,62 +33,32 @@ public class ProductServiceImpl implements ProductService {
 	ProductCategoryRepository productCategoryRepository;
 
 	@Override
-	public Product findById(Long id) {
-		Optional<Product> productOpt = productRepository.findById(id);
-		if (productOpt.isPresent()) {
-			return productOpt.get();
-		} else {
-			throw new AppException("No product found for the given Product_ID: " + id);
-		}
-	}
-
-	@Override
-	public List<ProductDisplay> getRelatedProducts(ProductCategory productCategory, Long id) {
-	//	List<Product> products = productRepository.findByProductCategoryAndIdNotOrderBySellCountDesc(productCategory,id);
-		//return AppUtil.createProductDisplay(products);
-		return null;
-	}
-
-	@Override
-	public List<ProductDisplay> findTop8ByOrderByDateCreatedDesc() {
-//		List<Product> products = productRepository.findTop8ByOrderByDateCreatedDesc();
-//		return AppUtil.createProductDisplay(products);
-		return null;
-	}
-
-	@Override
-	public List<ProductDisplay> findTop8ByOrderBySellCountDesc() {
-//		List<Product> products = productRepository.findTop8ByOrderBySellCountDesc();
-//		return AppUtil.createProductDisplay(products);
-		return null;
-	}
-
-	@Override
-	public List<ProductDisplay> findCategoryProducts(int offset, int size, String sort, String category) {
-		/*
-		 * try { //ProductCategory productCategory =
-		 * productCategoryRepository.findByName(category); if (productCategory != null)
-		 * { Pageable pageRequest = PageRequest.of(Math.floorDiv(offset, size), size,
-		 * Sort.by(Direction.DESC, sort)); // List<Product> products =
-		 * productRepository.findByProductCategoryOrderByNameDesc(productCategory,
-		 * pageRequest); //return AppUtil.createProductDisplay(products); return null; }
-		 * else { return Collections.emptyList(); } } catch (Exception e) { throw new
-		 * AppException(e.getMessage()); }
-		 */
-		return null;
-	}
-
-	@Override
 	public List<ProductDisplay> fetchShowProducts() {
 		try {
-		//	List<Product> products = productRepository.findProductsByShowTagOrderByNameAsc(true);
-		//	return AppUtil.createProductDisplay(products);
-			return null;
+			List<Product> products = productRepository.findByShowTagOrderByNameAsc(true);
+			return AppUtil.createProductDisplay(products);
 		} catch (Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
 
+	@Override
+	public List<ProductDisplay> findCategoryProducts(int offset, int size, String sort, String category) {
+		try {
+			ProductCategory productCategory = productCategoryRepository.findByParentCategory(category);
+			if (productCategory != null) {
+				Pageable pageRequest = PageRequest.of(Math.floorDiv(offset, size), size, Sort.by(Direction.DESC, sort));
+				List<Product> products = productRepository.findByProductCategoryOrderByNameDesc(productCategory,
+						pageRequest);
+				return AppUtil.createProductDisplay(products);
+			} else {
+				return Collections.emptyList();
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<ProductDisplay> SearchProducts(int offset, int size, String sort,
@@ -103,6 +75,54 @@ public class ProductServiceImpl implements ProductService {
 		} catch (Exception e) {
 			throw new AppException(e.getMessage());
 
+		}
+	}
+	
+	@Override
+	public Product findById(Long id) {
+		Optional<Product> productOpt = productRepository.findById(id);
+		if (productOpt.isPresent()) {
+			return productOpt.get();
+		} else {
+			throw new AppException("No product found for the given Product_ID: " + id);
+		}
+	}
+
+	@Override
+	public List<ProductDisplay> getRelatedProducts(Long id) {
+		try {
+			Optional<Product> productOpt = productRepository.findById(id);
+			if (!productOpt.isPresent()) {
+				throw new NotFoundException("No product found for the given productId: " + id);
+			}
+			ProductCategory category = productOpt.get().getProductCategory();
+			if (category == null) {
+				throw new NotFoundException("No product category found for the given productId: " + id);
+			}
+			List<Product> products = productRepository.findByProductCategoryAndIdNotOrderBySellCountDesc(category, id);
+			return AppUtil.createProductDisplay(products);
+		} catch (Exception e) {
+			throw new AppException(e.getMessage());
+		}
+	}
+
+	@Override
+	public List<ProductDisplay> findRecentlyAddedProduct() {
+		try {
+			List<Product> products = productRepository.findTop8ByOrderByCreatedAtDesc();
+			return AppUtil.createProductDisplay(products);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	@Override
+	public List<ProductDisplay> findMostSellingProducts() {
+		try {
+			List<Product> products = productRepository.findTop8ByOrderBySellCountDesc();
+			return AppUtil.createProductDisplay(products);
+		} catch (Exception e) {
+			throw e;
 		}
 	}
 }

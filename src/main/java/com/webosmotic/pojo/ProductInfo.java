@@ -9,7 +9,6 @@ import com.webosmotic.entity.ProductCategory;
 @Embeddable
 public class ProductInfo {
 	
-	
 	private String name;
 	private Float price;
 	private String icon;

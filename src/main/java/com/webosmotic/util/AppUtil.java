@@ -1,5 +1,6 @@
 package com.webosmotic.util;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.webosmotic.entity.Product;
+import com.webosmotic.entity.ProductSummary;
 import com.webosmotic.pojo.ProductDisplay;
 
 /**
@@ -59,8 +61,21 @@ public class AppUtil {
 		return productDisplays;
 	}
 	
-
-	
+	public static ProductSummary createProductSummmary(Product product) {
+		ProductSummary summary = new ProductSummary();
+		summary.setProductId(product.getId());
+		summary.setName(product.getName());
+		summary.setCategory(product.getProductCategory().getParentCategory());
+		summary.setSubCategory(product.getProductCategory().getSubCategory());
+		summary.setPrice(product.getUnitPrice());
+		summary.setDiscount(product.getDiscount());
+		summary.setShippingPrice(product.getShippingPrice());
+		summary.setSellerName(product.getSeller());
+		summary.setIcon(product.getImage());
+		summary.setQuantity(1);
+		summary.setDeliveredBy(LocalDate.now().plusDays(2));
+		return summary;
+	}
 
 	public static String randomAlphaNumeric(int count) {
 		StringBuilder builder = new StringBuilder();
@@ -71,5 +86,8 @@ public class AppUtil {
 		}
 		return builder.toString();
 	}
+	
+	
+	
 
 }

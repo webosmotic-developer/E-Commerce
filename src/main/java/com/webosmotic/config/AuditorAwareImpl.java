@@ -7,7 +7,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.webosmotic.entity.MyUserDetail;
+import com.webosmotic.pojo.MyUserDetail;
 
 public class AuditorAwareImpl implements AuditorAware<Long>{
 

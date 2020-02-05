@@ -1,4 +1,4 @@
-package com.webosmotic.entity;
+package com.webosmotic.pojo;
 
 import java.util.Collection;
 import java.util.List;
@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+
+import com.webosmotic.entity.User;
 
 /**
  * Custom Class implementing the OAuth2User of the spring security to return the

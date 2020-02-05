@@ -14,11 +14,11 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.webosmotic.entity.OAuthUserImpl;
+import com.webosmotic.Enum.RoleType;
 import com.webosmotic.entity.Role;
-import com.webosmotic.entity.RoleType;
 import com.webosmotic.entity.User;
 import com.webosmotic.exception.OAuth2AuthenticationProcessingException;
+import com.webosmotic.pojo.OAuthUserImpl;
 import com.webosmotic.repository.UserRepository;
 import com.webosmotic.security.oauth2.user.OAuth2UserInfo;
 import com.webosmotic.security.oauth2.user.OAuth2UserInfoFactory;

@@ -1,6 +1,6 @@
 package com.webosmotic.service;
 
-import com.webosmotic.entity.TokenType;
+import com.webosmotic.Enum.TokenType;
 import com.webosmotic.entity.User;
 import com.webosmotic.entity.VerificationToken;
 

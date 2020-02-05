@@ -17,16 +17,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.webosmotic.Enum.OrderStatus;
+
 
 @Entity
-@AttributeOverride(name = "Id", column = @Column(name = "order_id"))
-@Table (name = "order_info")
+@AttributeOverride(name = "id", column = @Column(name = "order_id"))
+@Table (name = "orders")
 public class Order extends UserAudit implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-	private Set<OrderDetails> orderDetailsList = new HashSet<>();
+	private Set<ProductSummary> products = new HashSet<>();
 	
 	@Column(name = "Order_Number")
 	private String orderNumber;
@@ -51,14 +53,6 @@ public class Order extends UserAudit implements Serializable{
 	private float payableAmount;
 	
 	private LocalDate deliveryDate;
-
-	public Set<OrderDetails> getOrderDetailsList() {
-		return orderDetailsList;
-	}
-
-	public void setOrderDetailsList(Set<OrderDetails> orderDetailsList) {
-		this.orderDetailsList = orderDetailsList;
-	}
 
 	public String getOrderNumber() {
 		return orderNumber;
@@ -130,5 +124,20 @@ public class Order extends UserAudit implements Serializable{
 
 	public void setPayableAmount(float payableAmount) {
 		this.payableAmount = payableAmount;
+	}
+
+	public Set<ProductSummary> getProducts() {
+		return products;
+	}
+
+	public void setProducts(Set<ProductSummary> products) {
+		this.products = products;
+	}
+	
+	public void addProduct(ProductSummary summary) {
+		if(summary != null) {
+			products.add(summary);
+		}
+		summary.setOrder(this);
 	}
 }

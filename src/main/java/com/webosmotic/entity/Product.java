@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "product")
-@AttributeOverride(name = "Id", column = @Column(name = "product_id"))
+@AttributeOverride(name = "id", column = @Column(name = "product_id"))
 public class Product extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;

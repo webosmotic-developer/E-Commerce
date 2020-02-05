@@ -8,12 +8,14 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import com.webosmotic.Enum.RoleType;
+
 /**
  * Main Entity Class which describes the role of the user
  */
 
 @Entity
-@AttributeOverride(name = "Id", column = @Column(name = "role_id"))
+@AttributeOverride(name = "id", column = @Column(name = "role_id"))
 public class Role extends BaseEntity implements Serializable {
 
 	public Role() {}
