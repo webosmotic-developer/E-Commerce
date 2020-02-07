@@ -1,5 +1,6 @@
 package com.webosmotic.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -121,6 +122,41 @@ public class ProductServiceImpl implements ProductService {
 		try {
 			List<Product> products = productRepository.findTop8ByOrderBySellCountDesc();
 			return AppUtil.createProductDisplay(products);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	@Override
+	public List<Product> saveNewProduct(List<Product> products) {
+		try {
+			
+			
+			List<Product> savedProducts = new ArrayList<Product>();
+			products.forEach(p -> {
+
+				ProductCategory pcategory = p.getProductCategory();
+				
+				ProductCategory existingCategory = productCategoryRepository.findByParentCategoryAndSubCategory(pcategory.getParentCategory(), pcategory.getSubCategory());
+				if(existingCategory != null) {
+					p.setProductCategory(existingCategory);
+				}
+				savedProducts.add(productRepository.save(p));
+			});
+			return savedProducts;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	@Override
+	public List<ProductCategory> saveProductCategory(List<ProductCategory> category) {
+		try {
+			List<ProductCategory> savedProducts = new ArrayList<>();
+			category.forEach(p -> {
+				savedProducts.add(productCategoryRepository.save(p));
+			});
+			return savedProducts;
 		} catch (Exception e) {
 			throw e;
 		}

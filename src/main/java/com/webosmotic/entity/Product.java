@@ -3,17 +3,19 @@ package com.webosmotic.entity;
 import java.io.Serializable;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Type;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -23,7 +25,7 @@ public class Product extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
 	@JoinColumn(name = "category_id")
 	@JsonIgnoreProperties("productList")
 	private ProductCategory productCategory;
@@ -40,13 +42,14 @@ public class Product extends BaseEntity implements Serializable {
 	@NotBlank
 	private String description;
 
-	@Column(name = "sku")
+	@Column(name = "sku" , unique = true)
+	@NaturalId
 	@NotBlank
 	private String SKU;
 
 	@Column(name = "stock")
 	@NotNull
-	private Float stock;
+	private Integer stock;
 
 	@Column(name = "cargo_price")
 	private Float shippingPrice;
@@ -58,7 +61,6 @@ public class Product extends BaseEntity implements Serializable {
 	private String image;
 
 	@Column(name = "sell_count")
-	@JsonIgnore
 	private Integer sellCount;
 	
 	@Column(columnDefinition = "BOOLEAN")
@@ -96,13 +98,7 @@ public class Product extends BaseEntity implements Serializable {
 		SKU = sKU;
 	}
 
-	public Float getStock() {
-		return stock;
-	}
-
-	public void setStock(Float stock) {
-		this.stock = stock;
-	}
+	
 
 	public Float getShippingPrice() {
 		return shippingPrice;
@@ -128,14 +124,7 @@ public class Product extends BaseEntity implements Serializable {
 		this.image = image;
 	}
 
-	public Integer getSellCount() {
-		return sellCount;
-	}
-
-	public void setSellCount(Integer sellCount) {
-		this.sellCount = sellCount;
-	}
-
+	
 	public boolean isShowTag() {
 		return showTag;
 	}
@@ -182,6 +171,30 @@ public class Product extends BaseEntity implements Serializable {
 
 	public void setSeller(String seller) {
 		this.seller = seller;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Integer getSellCount() {
+		return sellCount;
+	}
+
+	public void setSellCount(Integer sellCount) {
+		this.sellCount = sellCount;
+	}
+
+	public Integer getStock() {
+		return stock;
+	}
+
+	public void setStock(Integer stock) {
+		this.stock = stock;
 	}
 	
 	

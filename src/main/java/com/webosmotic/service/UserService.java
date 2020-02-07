@@ -1,7 +1,7 @@
 package com.webosmotic.service;
 
+import com.webosmotic.Enum.AuthProvider;
 import com.webosmotic.entity.User;
-import com.webosmotic.social.modal.AuthProvider;
 
 public interface UserService {
 	

@@ -12,16 +12,19 @@ import com.webosmotic.entity.Cart;
 import com.webosmotic.entity.Order;
 import com.webosmotic.entity.Product;
 import com.webosmotic.entity.ProductSummary;
+import com.webosmotic.entity.User;
 import com.webosmotic.exception.AppException;
 import com.webosmotic.exception.NotFoundException;
+import com.webosmotic.pojo.CartCheckOutResponse;
 import com.webosmotic.pojo.MyUserDetail;
 import com.webosmotic.pojo.ProductSummaryUpdateRequest;
 import com.webosmotic.repository.CartRepository;
 import com.webosmotic.repository.OrderRepository;
 import com.webosmotic.repository.ProductRepository;
 import com.webosmotic.repository.ProductSummaryRepository;
+import com.webosmotic.repository.UserRepository;
 import com.webosmotic.util.AppUtil;
-import static com.websmotic.constant.AppConstant.ORDER_PLACED_COMMENT;
+import static com.websmotic.constant.AppConstant.ORDER_CREATED_COMMENT;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -34,6 +37,8 @@ public class CartServiceImpl implements CartService {
 	ProductSummaryRepository productSummaryRepository;
 	@Autowired
 	OrderRepository orderRepository;
+	@Autowired
+	UserRepository userRepository;
 	
 	@Override
 	public Cart fecthUserCart(MyUserDetail user) {
@@ -122,7 +127,7 @@ public class CartServiceImpl implements CartService {
 	}
 	
 	@Override
-	public Long createOrderForCart(MyUserDetail user, Long cartId) {
+	public CartCheckOutResponse createOrderForCart(MyUserDetail user, Long cartId) {
 		try {
 			Cart cart = cartRepository.findByCreatedByAndId(user.getId(), cartId);
 			if (cart == null) {
@@ -133,14 +138,20 @@ public class CartServiceImpl implements CartService {
 			newOrder.setOrderTotal(cart.getTotalPrice());
 			newOrder.setShippingCharge(cart.getTotalCargoPrice());
 			newOrder.setPayableAmount(cart.getTotalPrice() + cart.getTotalCargoPrice());
-			newOrder.setStatus(OrderStatus.Ordered);
-			newOrder.setStatusComment(ORDER_PLACED_COMMENT);
-			cart.getProducts().forEach(p -> {
-				p.setCart(null);
-				newOrder.addProduct(p);
-			});
-			Order savedOrder = orderRepository.save(newOrder);
-			return savedOrder.getId();
+			newOrder.setStatus(OrderStatus.Created);
+			newOrder.setStatusComment(ORDER_CREATED_COMMENT);
+			Order savedOrder = orderRepository.save(newOrder);	
+			Optional<User> loggedInUserOpt = userRepository.findById(user.getId());
+			if(!loggedInUserOpt.isPresent()) {
+				throw new NotFoundException("No user found");
+			}			
+			CartCheckOutResponse response = new CartCheckOutResponse();
+			response.setName(loggedInUserOpt.get().getName());
+			response.setEmail(loggedInUserOpt.get().getEmail());
+			response.setAddress(loggedInUserOpt.get().getAdresses());
+			response.setOrderId(savedOrder.getId());
+			response.setOrderNumber(savedOrder.getOrderNumber());
+			return response;
 		} catch (Exception e) {
 			throw e;
 		}

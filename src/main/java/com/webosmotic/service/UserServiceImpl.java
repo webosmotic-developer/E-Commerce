@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.webosmotic.Enum.AuthProvider;
 import com.webosmotic.Enum.RoleType;
 import com.webosmotic.entity.Role;
 import com.webosmotic.entity.User;
 import com.webosmotic.repository.RoleRepository;
 import com.webosmotic.repository.UserRepository;
-import com.webosmotic.social.modal.AuthProvider;
 
 /**
  * Service class for User
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			Role role = new Role(RoleType.Role_Buyer, "Buyer");
 			signupRequest.getRoles().add(role);
-			signupRequest.setProvider(AuthProvider.local);
+			signupRequest.setProvider(AuthProvider.Local);
 			signupRequest.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
 			signupRequest.setEnable(false);
 			return saveUser(signupRequest);

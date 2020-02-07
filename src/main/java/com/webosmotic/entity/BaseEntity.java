@@ -1,6 +1,7 @@
 package com.webosmotic.entity;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -27,18 +28,26 @@ public abstract class BaseEntity {
 	private Long id;
 
 	@CreatedDate
-	@Column(nullable = false, updatable = false)
-	private Instant createdAt;
+	@Column(name = "createdAt" , nullable = false, updatable = false)
+	private LocalDateTime createdAt;
 
 	@LastModifiedDate
-	@Column(nullable = false)
+	@Column(name = "updatedAt" , nullable = false)
 	private Instant updatedAt;
 
-	public Instant getCreatedAt() {
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Instant createdAt) {
+	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 
@@ -48,13 +57,5 @@ public abstract class BaseEntity {
 
 	public void setUpdatedAt(Instant updatedAt) {
 		this.updatedAt = updatedAt;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 }

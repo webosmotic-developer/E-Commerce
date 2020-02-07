@@ -8,6 +8,8 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
 
 	ProductCategory findByParentCategory(String category);
 
+	ProductCategory findByParentCategoryAndSubCategory(String parentCategory, String subCategory);
+
 	//ProductCategory findByName(String category);
 	
 	

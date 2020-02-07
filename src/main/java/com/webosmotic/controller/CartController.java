@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.webosmotic.entity.Cart;
 import com.webosmotic.exception.AppException;
 import com.webosmotic.pojo.ApiResponse;
+import com.webosmotic.pojo.CartCheckOutResponse;
 import com.webosmotic.pojo.ProductSummaryUpdateRequest;
 import com.webosmotic.service.CartService;
 import com.webosmotic.util.SecurityUtil;
@@ -101,12 +102,12 @@ public class CartController {
 	 * @return OrderID 
 	 */
 	@RequestMapping(value = "/checkout/{id}", method = RequestMethod.GET)
-	public ResponseEntity<ApiResponse<Long>> cartCheckOut(@PathVariable("id") Long cartId) {
-		ApiResponse<Long> response = new ApiResponse<>();
+	public ResponseEntity<ApiResponse<CartCheckOutResponse>> cartCheckOut(@PathVariable("id") Long cartId) {
+		ApiResponse<CartCheckOutResponse> response = new ApiResponse<>();
 		try {
-			Long orderId = cartService.createOrderForCart(SecurityUtil.getUser(), cartId);
+			CartCheckOutResponse checkout = cartService.createOrderForCart(SecurityUtil.getUser(), cartId);
 			response.setSuccess(true);
-			response.setData(orderId);
+			response.setData(checkout);
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			throw new AppException(e.getMessage());

@@ -24,7 +24,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.NaturalId;
 
-import com.webosmotic.social.modal.AuthProvider;
+import com.webosmotic.Enum.AuthProvider;
 
 /**
  * Main Entity Class describing the User details, address and roles
@@ -62,7 +62,7 @@ public class User extends BaseEntity implements Serializable {
 
 	private LocalDateTime verifiedTime;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Address> adresses = new ArrayList<>();
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL) // LAZY - no session ?? TODO troubleshoot
@@ -148,5 +148,12 @@ public class User extends BaseEntity implements Serializable {
 
 	public void setVerifiedTime(LocalDateTime verifiedTime) {
 		this.verifiedTime = verifiedTime;
+	}
+	
+	public void addAddress(Address address) {
+		if(address != null) {
+			adresses.add(address);
+		}
+		address.setUser(this);
 	}
 }

@@ -2,6 +2,7 @@ package com.webosmotic.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -16,7 +17,7 @@ import javax.persistence.ManyToOne;
 public class Address extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	private String address;
 	private String city;
 	private String state;
@@ -25,8 +26,9 @@ public class Address extends BaseEntity implements Serializable {
 	private String zipCode;
 	private String landmark;
 	private Boolean isDefault;
+	private String addressType;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
 	@JoinColumn(name = "user_id")
 	private User user;
 
@@ -100,6 +102,14 @@ public class Address extends BaseEntity implements Serializable {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getAddressType() {
+		return addressType;
+	}
+
+	public void setAddressType(String addressType) {
+		this.addressType = addressType;
 	}
 
 }

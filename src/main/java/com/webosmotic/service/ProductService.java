@@ -3,6 +3,7 @@ package com.webosmotic.service;
 import java.util.List;
 
 import com.webosmotic.entity.Product;
+import com.webosmotic.entity.ProductCategory;
 import com.webosmotic.pojo.ProductDisplay;
 import com.webosmotic.pojo.ProductSearchCriteria;
 
@@ -21,6 +22,10 @@ public interface ProductService {
 	List<ProductDisplay> findMostSellingProducts();
 
 	List<ProductDisplay> findRecentlyAddedProduct();
+
+	List<Product> saveNewProduct(List<Product> products);
+
+	List<ProductCategory> saveProductCategory(List<ProductCategory> category);
 
 
 }

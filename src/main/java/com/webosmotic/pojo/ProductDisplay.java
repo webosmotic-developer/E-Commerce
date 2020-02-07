@@ -12,6 +12,8 @@ public class ProductDisplay {
 	private Integer sellCount;
 	private Float shippingPrice;
 	private Float discount;
+	private String brand;
+	private Integer stock;
 	
 	public Long getId() {
 		return Id;
@@ -61,5 +63,17 @@ public class ProductDisplay {
 	}
 	public void setDiscount(Float discount) {
 		this.discount = discount;
+	}
+	public String getBrand() {
+		return brand;
+	}
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+	public Integer getStock() {
+		return stock;
+	}
+	public void setStock(Integer stock) {
+		this.stock = stock;
 	}
 }

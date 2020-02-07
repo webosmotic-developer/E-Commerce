@@ -49,6 +49,7 @@ public class AppUtil {
 		List<ProductDisplay> productDisplays = new ArrayList<>();
 		products.forEach(p -> {
 			ProductDisplay display = new ProductDisplay();
+			display.setId(p.getId());
 			display.setCategory(p.getProductCategory());
 			display.setImages(p.getImage());
 			display.setName(p.getName());
@@ -56,6 +57,8 @@ public class AppUtil {
 			display.setSellCount(p.getSellCount());
 			display.setShippingPrice(p.getShippingPrice());
 			display.setDiscount(p.getDiscount());
+			display.setBrand(p.getBrand());
+			display.setStock(p.getStock());
 			productDisplays.add(display);
 		});
 		return productDisplays;

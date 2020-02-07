@@ -1,10 +1,10 @@
-package com.webosmotic.social.modal;
+package com.webosmotic.Enum;
 
 /**
  *  Enum containing the different Auth provider 
  */
 public enum AuthProvider {	
-	local,
-    facebook,
-    google
+	Local,
+    Facebook,
+    Google
 }

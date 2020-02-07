@@ -17,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NaturalId;
+
 import com.webosmotic.Enum.OrderStatus;
 
 
@@ -30,11 +32,12 @@ public class Order extends UserAudit implements Serializable{
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private Set<ProductSummary> products = new HashSet<>();
 	
-	@Column(name = "Order_Number")
+	@NaturalId
+	@Column(name = "Order_Number", unique = true)
 	private String orderNumber;
 	
-	@OneToOne(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
-	@JoinColumn(name = "address_id")
+	@OneToOne(fetch = FetchType.EAGER , cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+	@JoinColumn(name = "shippingAddress_Id")
 	private Address shippingAddress;
 	
 	@Column(name = "Tracking_Number")

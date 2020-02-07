@@ -2,8 +2,8 @@ package com.webosmotic.security.oauth2.user;
 
 import java.util.Map;
 
+import com.webosmotic.Enum.AuthProvider;
 import com.webosmotic.exception.OAuth2AuthenticationProcessingException;
-import com.webosmotic.social.modal.AuthProvider;
 
 /**
  * Factory class returning the type of OAuth2UserInfo based on the type of the
@@ -16,9 +16,9 @@ public class OAuth2UserInfoFactory {
 	}
 
 	public static OAuth2UserInfo getOAuth2UserInfo(String registrationId, Map<String, Object> attributes) {
-		if (registrationId.equalsIgnoreCase(AuthProvider.google.toString())) {
+		if (registrationId.equalsIgnoreCase(AuthProvider.Google.toString())) {
 			return new GoogleOAuth2UserInfo(attributes);
-		} else if (registrationId.equalsIgnoreCase(AuthProvider.facebook.toString())) {
+		} else if (registrationId.equalsIgnoreCase(AuthProvider.Facebook.toString())) {
 			return new FacebookOAuth2UserInfo(attributes);
 		} else {
 			throw new OAuth2AuthenticationProcessingException(
