@@ -103,7 +103,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 	public void deleteverificationToken(VerificationToken token) {
 		Optional<VerificationToken> existingToken = verificationRepository.findById(token.getId());
 		if (existingToken.isPresent()) {
-			verificationRepository.delete(token);
+			verificationRepository.delete(existingToken.get());
 		} else {
 			throw new AppException("No Verification token found for the given token");
 		}

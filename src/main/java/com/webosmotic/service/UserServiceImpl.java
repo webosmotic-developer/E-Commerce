@@ -98,6 +98,7 @@ public class UserServiceImpl implements UserService {
 				existingRole = new Role(RoleType.Role_Buyer, "Buyer");
 			}
 			User newUser = new User();
+			newUser.setName(signupRequest.getName());
 			newUser.setUsername(signupRequest.getUsername());
 			newUser.setEmail(signupRequest.getEmail());
 			newUser.setPassword(passwordEncoder.encode(signupRequest.getPassword()));

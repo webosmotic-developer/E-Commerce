@@ -73,8 +73,10 @@ public class AuthController {
 			if (existingUser != null && !existingUser.getEnable()) {
 				throw new UserNotFoundException("The given user email is not verified");
 			} else {
+				String username = existingUser.getUsername();
+				String password =  request.getPassword();
 				Authentication authentication = authenticationManager.authenticate(
-						new UsernamePasswordAuthenticationToken(existingUser.getUsername(), existingUser.getPassword()));
+						new UsernamePasswordAuthenticationToken(username, password));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 				String jwt = jwtProvider.generate(authentication);
 				return ResponseEntity.ok(new LoginResponse(jwt, existingUser.getEmail(), existingUser.getName()));

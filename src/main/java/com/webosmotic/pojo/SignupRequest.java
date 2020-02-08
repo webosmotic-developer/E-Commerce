@@ -10,6 +10,8 @@ import javax.validation.constraints.Size;
 
 public class SignupRequest {
 	
+	@NotEmpty(message = "The name cannot be blank")
+	private String name;
 	@NotEmpty(message = "The username cannot be blank")
 	private String username;
 	@NotEmpty
@@ -40,6 +42,12 @@ public class SignupRequest {
 	@Override
 	public String toString() {
 		return "SignupRequest [username=" + username + ", email=" + email + ", password=" + password + "]";
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }
