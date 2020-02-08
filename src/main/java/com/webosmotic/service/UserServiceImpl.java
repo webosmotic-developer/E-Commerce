@@ -4,14 +4,18 @@ import java.util.Collections;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.webosmotic.Enum.AuthProvider;
 import com.webosmotic.Enum.RoleType;
+import com.webosmotic.controller.AuthController;
 import com.webosmotic.entity.Role;
 import com.webosmotic.entity.User;
+import com.webosmotic.pojo.SignupRequest;
 import com.webosmotic.repository.RoleRepository;
 import com.webosmotic.repository.UserRepository;
 
@@ -20,6 +24,8 @@ import com.webosmotic.repository.UserRepository;
  */
 @Service
 public class UserServiceImpl implements UserService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 	@Autowired
 	UserRepository userRepository;
@@ -85,14 +91,21 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	@Transactional
-	public User createUser(User signupRequest) {
+	public User createUser(SignupRequest signupRequest) {
 		try {
-			Role role = new Role(RoleType.Role_Buyer, "Buyer");
-			signupRequest.getRoles().add(role);
-			signupRequest.setProvider(AuthProvider.Local);
-			signupRequest.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
-			signupRequest.setEnable(false);
-			return saveUser(signupRequest);
+			Role existingRole = roleRepository.findByName(RoleType.Role_Buyer);
+			if(existingRole == null) {
+				existingRole = new Role(RoleType.Role_Buyer, "Buyer");
+			}
+			User newUser = new User();
+			newUser.setUsername(signupRequest.getUsername());
+			newUser.setEmail(signupRequest.getEmail());
+			newUser.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+			newUser.getRoles().add(existingRole);
+			newUser.setProvider(AuthProvider.Local);
+			newUser.setEnable(false);
+			logger.info("user" + " " + newUser);
+			return saveUser(newUser);
 		} catch (Exception e) {
 			throw e;
 		}

@@ -2,10 +2,11 @@ package com.webosmotic.service;
 
 import com.webosmotic.Enum.AuthProvider;
 import com.webosmotic.entity.User;
+import com.webosmotic.pojo.SignupRequest;
 
 public interface UserService {
 	
-	User createUser(User user);
+	User createUser(SignupRequest signupRequest);
 	
 	User createSocialUser(User user, AuthProvider provider);
 	

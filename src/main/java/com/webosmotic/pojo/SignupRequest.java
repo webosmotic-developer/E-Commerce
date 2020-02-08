@@ -10,8 +10,6 @@ import javax.validation.constraints.Size;
 
 public class SignupRequest {
 	
-	@NotEmpty
-	private String name;
 	@NotEmpty(message = "The username cannot be blank")
 	private String username;
 	@NotEmpty
@@ -21,12 +19,6 @@ public class SignupRequest {
 	@Size(min = 3, max = 100, message = "The size of the password should be grater than 3 character")
 	private String password;
 	
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
 	public String getUsername() {
 		return username;
 	}
@@ -44,6 +36,10 @@ public class SignupRequest {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	@Override
+	public String toString() {
+		return "SignupRequest [username=" + username + ", email=" + email + ", password=" + password + "]";
 	}
 
 }

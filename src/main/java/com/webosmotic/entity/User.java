@@ -25,6 +25,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.NaturalId;
 
 import com.webosmotic.Enum.AuthProvider;
+import com.webosmotic.Enum.Gender;
 
 /**
  * Main Entity Class describing the User details, address and roles
@@ -37,8 +38,6 @@ public class User extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@NotEmpty(message = "The name cannot be empty")
-	@Size(max = 45)
 	private String name;
 
 	private String username;
@@ -58,6 +57,9 @@ public class User extends BaseEntity implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private AuthProvider provider;
 
+	@Enumerated(EnumType.STRING)
+	private Gender gender;
+	
 	private String providerId;
 
 	private LocalDateTime verifiedTime;
@@ -134,6 +136,13 @@ public class User extends BaseEntity implements Serializable {
 		this.providerId = providerId;
 	}
 
+	@Override
+	public String toString() {
+		return "User [name=" + name + ", username=" + username + ", email=" + email + ", password=" + password
+				+ ", enable=" + enable + ", provider=" + provider + ", gender=" + gender + ", providerId=" + providerId
+				+ ", verifiedTime=" + verifiedTime + ", adresses=" + adresses + ", roles=" + roles + "]";
+	}
+
 	public Boolean getEnable() {
 		return enable;
 	}
@@ -155,5 +164,13 @@ public class User extends BaseEntity implements Serializable {
 			adresses.add(address);
 		}
 		address.setUser(this);
+	}
+
+	public Gender getGender() {
+		return gender;
+	}
+
+	public void setGender(Gender gender) {
+		this.gender = gender;
 	}
 }

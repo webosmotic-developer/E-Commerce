@@ -75,9 +75,9 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 	private void sendEmailForRegistration(String token, User user, String appUrl) {
 		String recipientAddress = user.getEmail();
 		String subject = "Registration Confirmation";
-		String confirmationUrl = appUrl + "/verify-email?id=" + user.getId() + "&token=" + token;
-		String message = "Congratulation !! Your aqccount has been craeted please click on the link below to verify your email";
-		String text = message + " rn" + "http://localhost:8080" + confirmationUrl;
+		String confirmationUrl = "/verify-email?token=" + token;
+		String message = "Congratulation !! Your account has been craeted please click on the link below to verify your email";
+		String text = message + "\n" +   "http://localhost:4200" + confirmationUrl;
 		emailService.sendSimpleMessageForRegisteration(recipientAddress, subject, text);
 	}
 

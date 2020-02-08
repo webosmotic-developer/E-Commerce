@@ -26,7 +26,7 @@ public class AppUtil {
 	 * @Return boolean
 	 */
 	public static boolean checkForTokenExpiration(LocalDateTime passToken) {
-		if (passToken.isAfter(LocalDateTime.now(ZoneOffset.UTC))) {
+		if(passToken.isAfter(passToken.plusDays(1))) {
 			return true;
 		} else {
 			return false;

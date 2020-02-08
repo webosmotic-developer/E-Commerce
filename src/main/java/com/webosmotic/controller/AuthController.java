@@ -31,6 +31,7 @@ import com.webosmotic.pojo.ForgotPasswordRequest;
 import com.webosmotic.pojo.LoginRequest;
 import com.webosmotic.pojo.LoginResponse;
 import com.webosmotic.pojo.SignUpResponse;
+import com.webosmotic.pojo.SignupRequest;
 import com.webosmotic.repository.UserRepository;
 import com.webosmotic.security.jwt.JwtProvider;
 import com.webosmotic.service.UserService;
@@ -73,7 +74,7 @@ public class AuthController {
 				throw new UserNotFoundException("The given user email is not verified");
 			} else {
 				Authentication authentication = authenticationManager.authenticate(
-						new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+						new UsernamePasswordAuthenticationToken(existingUser.getUsername(), existingUser.getPassword()));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 				String jwt = jwtProvider.generate(authentication);
 				return ResponseEntity.ok(new LoginResponse(jwt, existingUser.getEmail(), existingUser.getName()));
@@ -91,7 +92,7 @@ public class AuthController {
 	 */
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	@Transactional
-	public ResponseEntity<SignUpResponse> save(@RequestBody User signupRequest, HttpServletRequest request) {
+	public ResponseEntity<SignUpResponse> save(@RequestBody SignupRequest signupRequest, HttpServletRequest request) {
 		try {
 			logger.info("user" + " " + signupRequest);
 			// check for Existing user
@@ -107,7 +108,7 @@ public class AuthController {
 			verificationTokenService.createVerificationToken(savedUser, TokenType.Register, appUrl);
 			// creating an signUp response
 			SignUpResponse response = new SignUpResponse();
-			response.setMessage("Success!! An verification email is dsend to your register email.");
+			response.setMessage("Success!! An verification email is send to your register email.");
 			response.setUsername(savedUser.getUsername());
 			response.setEmail(savedUser.getEmail());
 			response.setSuccess(true);
@@ -132,7 +133,7 @@ public class AuthController {
 			throw new UserNotFoundException("No token found for the given token");
 		}
 		boolean isTokenExpired = AppUtil.checkForTokenExpiration(verificationToken.getExpiryDate());
-		if (isTokenExpired) {
+		if (!isTokenExpired) {
 			User user = verificationToken.getUser();
 			user.setEnable(true);
 			user.setVerifiedTime(LocalDateTime.now(ZoneOffset.UTC));
