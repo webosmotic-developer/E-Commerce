@@ -1,5 +1,7 @@
 package com.webosmotic.pojo;
 
+import com.webosmotic.Enum.RoleType;
+
 /**
  * class to describe the response for the user login.
  * 
@@ -10,11 +12,13 @@ public class LoginResponse {
     private String type = "Bearer";
     private String email;
     private String name;
+    private RoleType role;
 
-    public LoginResponse(String token, String email, String name) {
+    public LoginResponse(String token, String email, String name, RoleType role) {
         this.email = email;
         this.name = name;
         this.token = token;
+        this.role = role;
     }
 
 	public String getToken() {
@@ -49,5 +53,13 @@ public class LoginResponse {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public RoleType getRole() {
+		return role;
+	}
+
+	public void setRole(RoleType role) {
+		this.role = role;
 	}
 }

@@ -121,10 +121,14 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public User createSocialUser(User user, AuthProvider provider) {
 		try {
+			Role existingRole = roleRepository.findByName(RoleType.Role_Buyer);
+			if(existingRole == null) {
+				existingRole = new Role(RoleType.Role_Buyer, "Buyer");
+			}
 			user.setProvider(provider);
 			Role role = new Role(RoleType.Role_Buyer, "Buyer");
 			user.getRoles().add(role);
-			user.setRoles(Collections.singleton(role));
+			user.getRoles().add(existingRole);
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			user.setEnable(true);
 			return saveUser(user);

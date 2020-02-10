@@ -3,9 +3,7 @@ package com.webosmotic.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
@@ -64,13 +62,13 @@ public class User extends BaseEntity implements Serializable {
 
 	private LocalDateTime verifiedTime;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Address> adresses = new ArrayList<>();
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL) // LAZY - no session ?? TODO troubleshoot
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"), 
 	inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
-	private Set<Role> roles = new HashSet<>();
+	private List<Role> roles = new ArrayList<>();
 
 	public String getPassword() {
 		return password;
@@ -112,13 +110,7 @@ public class User extends BaseEntity implements Serializable {
 		this.username = username;
 	}
 
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
+	
 
 	public AuthProvider getProvider() {
 		return provider;
@@ -172,5 +164,13 @@ public class User extends BaseEntity implements Serializable {
 
 	public void setGender(Gender gender) {
 		this.gender = gender;
+	}
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 }

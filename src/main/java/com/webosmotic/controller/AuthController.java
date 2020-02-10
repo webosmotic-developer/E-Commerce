@@ -79,7 +79,7 @@ public class AuthController {
 						new UsernamePasswordAuthenticationToken(username, password));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 				String jwt = jwtProvider.generate(authentication);
-				return ResponseEntity.ok(new LoginResponse(jwt, existingUser.getEmail(), existingUser.getName()));
+				return ResponseEntity.ok(new LoginResponse(jwt, existingUser.getEmail(), existingUser.getName(), existingUser.getRoles().get(0).getName()));
 			}
 		} catch (Exception e) {
 			throw new AppException(e.getMessage());
