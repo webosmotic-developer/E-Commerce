@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.webosmotic.entity.Product;
 import com.webosmotic.entity.ProductCategory;
+import com.webosmotic.entity.ProductReview;
 import com.webosmotic.exception.AppException;
 import com.webosmotic.pojo.ApiResponse;
 import com.webosmotic.pojo.ErrorResponse;
+import com.webosmotic.pojo.MyUserDetail;
 import com.webosmotic.pojo.ProductDisplay;
 import com.webosmotic.pojo.ProductSearchCriteria;
 import com.webosmotic.service.ProductService;
+import com.webosmotic.util.SecurityUtil;
 
 @RestController
 @RequestMapping("/product")
@@ -95,7 +98,7 @@ public class ProductController {
      * @Param Long Id
      * @return Product
      */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET, params = "id")
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<Product>> getFullProductDetailsById(@PathVariable("id") Long id) {
 		ApiResponse<Product> response = new ApiResponse<>();
 		try {
@@ -116,7 +119,7 @@ public class ProductController {
 	 * @Param Long Id
 	 * @return List<Products>
 	 */
-	@RequestMapping(value = "/related", method = RequestMethod.GET, params = "id")
+	@RequestMapping(value = "/related", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getByRelatedProducts(@RequestParam("id") Long id) {
 		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
 		try {
@@ -191,4 +194,23 @@ public class ProductController {
 			throw new AppException(e.getMessage());
 		}
 	}
+	
+	@RequestMapping(value = "/review/{pid}/save", method = RequestMethod.POST)
+	public ResponseEntity<ApiResponse<ProductReview>> saveProductReview(
+			@RequestBody ProductReview review,
+			@PathVariable ("pid") Long pid) {
+		ApiResponse<ProductReview> response = new ApiResponse<>();
+		try {
+			MyUserDetail user = SecurityUtil.getUser();
+			ProductReview savedProducts = productService.saveProductReview(review, pid, user);
+			response.setSuccess(true);
+			response.setData(savedProducts);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			throw new AppException(e.getMessage());
+		}
+	}
+	
+	
+	
 }

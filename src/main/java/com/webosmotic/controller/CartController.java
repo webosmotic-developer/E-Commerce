@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.webosmotic.entity.Cart;
 import com.webosmotic.exception.AppException;
+import com.webosmotic.exception.NotFoundException;
 import com.webosmotic.pojo.ApiResponse;
 import com.webosmotic.pojo.CartCheckOutResponse;
+import com.webosmotic.pojo.MyUserDetail;
 import com.webosmotic.pojo.ProductSummaryUpdateRequest;
 import com.webosmotic.service.CartService;
 import com.webosmotic.util.SecurityUtil;
@@ -49,7 +51,11 @@ public class CartController {
 	public ResponseEntity<ApiResponse<Cart>> addNewProductToCart(@PathVariable("product_id") Long productId) {
 		ApiResponse<Cart> response = new ApiResponse<>();
 		try {
-			Cart cart = cartService.addToCart(productId, SecurityUtil.getUser());
+			MyUserDetail user = SecurityUtil.getUser();
+			if(user != null) {
+				throw new NotFoundException("No LoggedIn user found");
+			}
+			Cart cart = cartService.addToCart(productId, user);
 			response.setSuccess(true);
 			response.setData(cart);
 			return new ResponseEntity<>(response, HttpStatus.OK);

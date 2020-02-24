@@ -15,11 +15,14 @@ import org.springframework.stereotype.Service;
 
 import com.webosmotic.entity.Product;
 import com.webosmotic.entity.ProductCategory;
+import com.webosmotic.entity.ProductReview;
 import com.webosmotic.exception.AppException;
+import com.webosmotic.pojo.MyUserDetail;
 import com.webosmotic.pojo.ProductDisplay;
 import com.webosmotic.pojo.ProductSearchCriteria;
 import com.webosmotic.repository.ProductCategoryRepository;
 import com.webosmotic.repository.ProductRepository;
+import com.webosmotic.repository.ProductReviewRepository;
 import com.webosmotic.specification.ProductSpecification;
 import com.webosmotic.util.AppUtil;
 
@@ -32,6 +35,8 @@ public class ProductServiceImpl implements ProductService {
 	ProductRepository productRepository;
 	@Autowired
 	ProductCategoryRepository productCategoryRepository;
+	@Autowired
+	ProductReviewRepository productReviewRepository;
 
 	@Override
 	public List<ProductDisplay> fetchShowProducts() {
@@ -160,5 +165,22 @@ public class ProductServiceImpl implements ProductService {
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+
+	@Override
+	public ProductReview saveProductReview(ProductReview review, Long pid, MyUserDetail user) {
+		try {
+			Optional<Product> productOpt = productRepository.findById(pid);
+			if (!productOpt.isPresent()) {
+				throw new NotFoundException("No product foud for the given productId: " + pid);
+			}
+
+			review.setProduct(productOpt.get());
+			review.setReviewerName(user.getUsername());
+			return productReviewRepository.save(review);
+		} catch (Exception e) {
+			throw new AppException(e.getMessage());
+		}
+
 	}
 }

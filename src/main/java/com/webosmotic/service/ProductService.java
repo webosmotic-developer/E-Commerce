@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.webosmotic.entity.Product;
 import com.webosmotic.entity.ProductCategory;
+import com.webosmotic.entity.ProductReview;
+import com.webosmotic.pojo.MyUserDetail;
 import com.webosmotic.pojo.ProductDisplay;
 import com.webosmotic.pojo.ProductSearchCriteria;
 
@@ -26,6 +28,8 @@ public interface ProductService {
 	List<Product> saveNewProduct(List<Product> products);
 
 	List<ProductCategory> saveProductCategory(List<ProductCategory> category);
+
+	ProductReview saveProductReview(ProductReview review, Long pid, MyUserDetail user);
 
 
 }

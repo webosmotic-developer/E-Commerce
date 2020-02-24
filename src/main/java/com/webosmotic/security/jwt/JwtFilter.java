@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.webosmotic.controller.AuthController;
 import com.webosmotic.entity.User;
+import com.webosmotic.pojo.MyUserDetail;
 import com.webosmotic.service.UserService;
 
 /**
@@ -49,10 +50,11 @@ public class JwtFilter extends OncePerRequestFilter {
 				String userName = jwtProvider.getUserName(jwt);
 				User user = userService.getUserByUserName(userName);
 				// if jwt ok, then authenticate
+				MyUserDetail userDetails = new MyUserDetail(user);
 				SimpleGrantedAuthority sga = new SimpleGrantedAuthority("Role_Buyer");
 				ArrayList<SimpleGrantedAuthority> list = new ArrayList<>();
 				list.add(sga);
-				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user.getUsername(),
+				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails,
 						null, list);
 				SecurityContextHolder.getContext().setAuthentication(auth);
 
