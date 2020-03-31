@@ -1,0 +1,220 @@
+<!--
+<h1 align="center" class="display-4 mb-5">{{title}}</h1>
+<div class="row text-center justify-content-center">
+  <div class="col-lg-6 ">
+    <div class="card mb-4 ">
+      <img height="60%" class="card-img-top" src="{{productInfo?.productIcon}}">
+      <div class="card-body">
+        <h4 class="card-title ">{{productInfo?.productName}}</h4>
+        <form name="form" #form='ngForm' (ngSubmit)="productInfo?.productStatus == 0 && addToCart()">
+          <div class="text-left">
+            <input hidden name="productId" [value]=productInfo?.productId>
+            <p class="card-test"><strong>Description: </strong>{{productInfo?.productDescription}}</p>
+            <p class="card-text">
+              <strong>Price: </strong>
+              <label id="price">{{productInfo?.productPrice | currency}}</label>
+            </p>
+            <p class="card-text"><strong>Stock: </strong>{{productInfo?.productStock}}</p>
+
+            <label class="card-text">
+              <strong>Quantity: </strong>
+              <input [(ngModel)]=count
+                     (change)="validateCount()"
+                     type="number"
+                     name="count"
+                     required
+                     min="1"
+                     [max]=productInfo?.productStock
+              >
+            </label>
+
+
+            <p class="card-text"><strong>Subtotal: </strong>
+              <label id="subtotal">{{count * productInfo?.productPrice | currency}}</label>
+            </p>
+          </div>
+          <button type="submit" [disabled]="!form.form.valid" *ngIf="productInfo?.productStatus == 0; else offBlock"
+                  class="btn btn-primary btn-lg"
+          >Add to Cart
+          </button>
+          <ng-template #offBlock><a class="btn btn-secondary btn-lg disabled">Unavailable</a></ng-template>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+-->
+
+
+
+<div>
+  <div class="container">
+    <div class="row s_product_inner">
+      <div class="col-lg-4">
+        <div class="s_product_img">
+          <div
+            id="carouselExampleIndicators"
+            class="carousel slide"
+            data-ride="carousel"
+          >
+            <ol class="carousel-indicators">
+              <li
+                data-target="#carouselExampleIndicators"
+                data-slide-to="0"
+                class="active"
+              >
+                <img
+                  src="{{productInfo.image}}"
+                  alt=""
+                />
+              </li>
+              <li
+                data-target="#carouselExampleIndicators"
+                data-slide-to="1"
+              >
+                <img
+                  src="{{productInfo.image}}"
+                  alt=""
+                />
+              </li>
+              <li
+                data-target="#carouselExampleIndicators"
+                data-slide-to="2"
+              >
+                <img
+                  src="{{productInfo.image}}"
+                  alt=""
+                />
+              </li>
+            </ol>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img
+                  class="d-block w-100"
+                  src="{{productInfo.image}}"
+                  alt="First slide"
+                />
+              </div>
+              <div class="carousel-item">
+                <img
+                  class="d-block w-100"
+                  src="{{productInfo.image}}"
+                  alt="Second slide"
+                />
+              </div>
+              <div class="carousel-item">
+                <img
+                  class="d-block w-100"
+                  src="{{productInfo.image}}"
+                  alt="Third slide"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card_area my-4 d-flex justify-content-between">
+          <a class="btn btn-primary" style="width: 170px;" href="#">Add to Cart</a>
+          <a class="btn btn-primary" style="width: 170px;" href="#">Buy now</a>
+        </div>
+      </div>
+      <div class="col-lg-7 offset-lg-1">
+        <div class="s_product_text">
+          <div class="brand">{{productInfo.brand}}</div>
+          <h3>{{productInfo.name}}</h3>
+          <div class="mb-2">
+            <span class="finalPrice">${{finalPrice}}</span>
+            <span class="actualPrice">${{productInfo.unitPrice}}</span>
+            <span class="ml-2 font-weight-bold discount">{{productInfo.discount}}% off</span>
+          </div>
+          <ul class="list">
+            <li>
+              <a class="active" href="#">
+                <span>Category</span> : {{productInfo.productCategory.parentCategory}}</a>
+            </li>
+            <li>
+              <a href="#"> <span>Availibility</span> : {{productInfo.stock > 5 ? 'In stock' : productInfo.stock + ' left'}}</a>
+            </li>
+          </ul>
+          <div class="mb-10">
+            <ngb-rating [rate]="currentRate" (hover)="hovered=$event" (leave)="hovered=0">
+              <ng-template #t let-fill="fill">
+                  <span class="star" [class.full]="fill === 100">
+                    <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+                  </span>
+              </ng-template>
+            </ngb-rating>
+            <span class="label-rating text-muted"> 34 reviws</span>
+          </div>
+          <div class="mb-10">
+            <span class="brand d-inline-block">Seller:</span>
+            <span class="brand d-inline-block ml-2">{{productInfo.seller}}</span>
+          </div>
+          <div class="mb-10">
+            <span class="brand d-inline-block text-dark">Delivered by {{deliveredDate}} </span>
+            <span *ngIf="productInfo.shippingPrice">| ${{productInfo.shippingPrice}}</span>
+          </div>
+          <hr/>
+          <div class="rating mb-10">
+            <div style="font-size: 20px">Rating & Review
+              <span class="d-inline-block border review">3.5 &#9733;</span>
+              <span class="ml-2">
+                <span class="d-inline-block reviewerName ">66 rating</span>
+                <span class="d-inline-block reviewerName">8 reviews</span>
+              </span>
+
+            </div>
+          </div>
+          <div>
+            <span class="reviewerName">Abhinn</span>
+            <span >
+              <ngb-rating [rate]="currentRate" (hover)="hovered=$event" (leave)="hovered=0">
+              <ng-template #t let-fill="fill" class="reviewerName">
+                  <span class="star starReview" [class.full]="fill === 100">
+                    <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+                  </span>
+              </ng-template>
+            </ngb-rating>
+            </span>
+            <div style="font-size: 14px;">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna
+              aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+              ullamco laboris nisi ut aliquip ex ea commodo
+            </div>
+            <hr/>
+          </div>
+          <div>
+            <span class="reviewerName">Abhinn</span>
+            <span>
+              <ngb-rating [rate]="currentRate" (hover)="hovered=$event" (leave)="hovered=0">
+              <ng-template #t let-fill="fill" class="reviewerName">
+                  <span class="star starReview" [class.full]="fill === 100">
+                    <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+                  </span>
+              </ng-template>
+            </ngb-rating>
+            </span>
+            <div style="font-size: 14px;">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna
+              aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+              ullamco laboris nisi ut aliquip ex ea commodo
+            </div>
+          </div>
+          <hr class="mb-0"/>
+          <div class="m-0">
+            <div class="all_review d-flex justify-content-between">
+              <span class="">All 28904 reviews</span>
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </div>
+          </div>
+          <hr class="mt-0"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-product-display [title]= "'Related Products'"
+                       [productsData]="relatedProducts">
+  </app-product-display>
+</div>

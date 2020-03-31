@@ -1,0 +1,7 @@
+<div class="jumbotron jumbotron-fluid" style="margin: 120px">
+  <div class="container">
+    <h1 *ngIf="!verifyUser" class="display-4">SignUp Success</h1>
+    <p class="lead">{{message}}</p>
+    <p *ngIf="verifyUser">please click on the link to login <a routerLink="/login">click</a></p>>
+  </div>
+</div>
