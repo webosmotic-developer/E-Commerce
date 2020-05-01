@@ -1,0 +1,23 @@
+<section>
+  <div class="container">
+      <div class="row" *ngFor="let productInfo of productsList" >
+        <div href="#"  (click)="productDetails(productInfo.id)">
+          <a href="#"  >
+            <img src= '../../../assets/pendrive_image.jpg' width="100">
+          </a>
+            <div >{{productInfo.name}}</div>
+            <div >
+              <ngb-rating [rate]="currentRate" (hover)="hovered=$event" (leave)="hovered=0">
+                <ng-template #t let-fill="fill">
+                  <span  [class.full]="fill === 100">
+                    <span [style.width.%]="fill">&#9733;</span>&#9733;
+                  </span>
+                </ng-template>
+              </ngb-rating>
+              <span > 34 reviws</span>
+            </div>
+            <div >{{productInfo.price | currency}}</div>
+        </div>
+      </div> <!-- col.// -->
+    </div>
+</section>
