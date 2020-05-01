@@ -12,14 +12,12 @@ import {Role} from "../../enum/Role";
 })
 export class NavigationComponent implements OnInit, OnDestroy {
 
-
     currentUserSubscription: Subscription;
     name$;
     name: string;
     currentUser: JwtResponse;
     root = '/';
     Role = Role;
-
     constructor(private userService: UserService,
                 private router: Router,
     ) {
@@ -38,7 +36,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
             }
         });
     }
-
+    searchQuery(search: string) {
+     this.router.navigate(['/products'], {queryParams:  {s: search}});
+    }
     ngOnDestroy(): void {
         this.currentUserSubscription.unsubscribe();
         // this.name$.unsubscribe();

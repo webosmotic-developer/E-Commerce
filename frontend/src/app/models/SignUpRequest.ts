@@ -1,0 +1,8 @@
+
+export class SignUpRequest {
+  constructor() { }
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}

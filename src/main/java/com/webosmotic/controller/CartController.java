@@ -3,10 +3,12 @@ package com.webosmotic.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.webosmotic.entity.Cart;
 import com.webosmotic.exception.AppException;
@@ -18,7 +20,9 @@ import com.webosmotic.pojo.ProductSummaryUpdateRequest;
 import com.webosmotic.service.CartService;
 import com.webosmotic.util.SecurityUtil;
 
+@RestController
 @RequestMapping("/cart")
+@Secured({"ROLE_BUYER","ROLE_ADMIN"})
 public class CartController {
 
 	@Autowired
@@ -52,7 +56,7 @@ public class CartController {
 		ApiResponse<Cart> response = new ApiResponse<>();
 		try {
 			MyUserDetail user = SecurityUtil.getUser();
-			if(user != null) {
+			if(user == null) {
 				throw new NotFoundException("No LoggedIn user found");
 			}
 			Cart cart = cartService.addToCart(productId, user);
@@ -88,7 +92,7 @@ public class CartController {
 	 * @PathVariable ProductSummaryUpdateRequest object
 	 * @return Cart object
 	 */
-	@RequestMapping(value = "cartitem/remove/{id}/", method = RequestMethod.GET)
+	@RequestMapping(value = "cartitem/remove/{id}", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<Cart>> removeProductFromCart(
 			@PathVariable("id") Long id) {
 		ApiResponse<Cart> response = new ApiResponse<>();
@@ -119,5 +123,4 @@ public class CartController {
 			throw new AppException(e.getMessage());
 		}
 	}
-
 }

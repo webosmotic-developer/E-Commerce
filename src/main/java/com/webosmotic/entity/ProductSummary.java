@@ -139,4 +139,5 @@ public class ProductSummary extends BaseEntity implements Serializable {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+	
 }

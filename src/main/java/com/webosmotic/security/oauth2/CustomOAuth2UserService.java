@@ -97,7 +97,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 		user.setEmail(oAuth2UserInfo.getEmail());
 		user.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
 		user.setProviderId(oAuth2UserInfo.getId());
-		Role role = new Role(RoleType.Role_Buyer, "Buyer");
+		Role role = new Role(RoleType.ROLE_BUYER, "Buyer");
 		user.getRoles().add(role);
 		user.setEnable(true);
 		user.setVerifiedTime(LocalDateTime.now());

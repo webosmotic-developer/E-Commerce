@@ -3,14 +3,16 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {apiUrl} from '../../environments/environment';
 import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
-import {JwtResponse} from '../models/JwtResponse';
+
 import {CookieService} from 'ngx-cookie-service';
-import {User} from "../models/User";
+import {User} from '../models/User';
 import {SignUpRequest} from '../models/SignUpRequest';
+import {JwtResponse} from '../response/JwtResponse';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class UserService {
   public nameTerms = new Subject<string>();
   public name$ = this.nameTerms.asObservable();
@@ -41,13 +43,13 @@ export class UserService {
   }
 
   signUp(user: SignUpRequest): Observable<any> {
-    console.log("user======", user);
+    console.log('user======', user);
     const url = `${apiUrl}/auth/signup`;
     return this.http.post<any>(url, user);
   }
 
   verifyUser(token: string): Observable<any> {
-    console.log("user======", token);
+    console.log('user======', token);
     const url = `${apiUrl}/auth/verify-email?token=` + token;
     return this.http.get<any>(url).pipe(
       tap(data => data),

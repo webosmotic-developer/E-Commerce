@@ -8,8 +8,9 @@ import {catchError, map, tap} from 'rxjs/operators';
 import {UserService} from './user.service';
 import {Cart} from '../models/Cart';
 import {Item} from '../models/Item';
-import {JwtResponse} from '../models/JwtResponse';
+
 import {ProductInOrder} from '../models/ProductInOrder';
+import {JwtResponse} from '../response/JwtResponse';
 
 @Injectable({
   providedIn: 'root'

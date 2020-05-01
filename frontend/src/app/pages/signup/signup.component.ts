@@ -32,7 +32,7 @@ export class SignupComponent implements OnInit {
     if (this.user.password !== this.user.confirmPassword) {
       this.passwordMatching = true;
     } else {
-      console.log("signup======" , this.user);
+      console.log('signup======' , this.user);
       delete this.user.confirmPassword;
       this.userService.signUp(this.user).subscribe((data) => {
         this.SingUpSuccess = true;

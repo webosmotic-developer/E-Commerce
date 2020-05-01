@@ -3,7 +3,6 @@ package com.webosmotic.service;
 import java.text.DecimalFormat;
 import java.util.Optional;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +23,13 @@ import com.webosmotic.repository.ProductRepository;
 import com.webosmotic.repository.ProductSummaryRepository;
 import com.webosmotic.repository.UserRepository;
 import com.webosmotic.util.AppUtil;
+import com.webosmotic.util.SecurityUtil;
+
 import static com.websmotic.constant.AppConstant.ORDER_CREATED_COMMENT;
 
 @Service
 public class CartServiceImpl implements CartService {
-	
+
 	@Autowired
 	CartRepository cartRepository;
 	@Autowired
@@ -39,16 +40,14 @@ public class CartServiceImpl implements CartService {
 	OrderRepository orderRepository;
 	@Autowired
 	UserRepository userRepository;
-	
 	@Override
 	public Cart fecthUserCart(MyUserDetail user) {
 		try {
-			Optional<Cart> cartOpt = cartRepository.findById(user.getId());
-			if (!cartOpt.isPresent()) {
+			Cart cart = cartRepository.findByCreatedBy(user.getId());
+			if (cart == null) {
 				throw new NotFoundException("No cart found for the given user");
 			}
-
-			return cartOpt.get();
+			return cart;
 		} catch (Exception e) {
 			throw e;
 		}
@@ -57,29 +56,36 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public Cart addToCart(Long productId, MyUserDetail user) {
 		try {
+			ProductSummary summary = null;
+			boolean existingItem = false;
 			Cart cart = cartRepository.findByCreatedBy(user.getId());
 			if (cart == null) {
-				cart = new Cart();
-			}
-			boolean existingItem = false;
-			Set<ProductSummary> products = cart.getProducts();
-			for (ProductSummary p : products) {
-				if (p.getId().equals(productId)) {
-					existingItem = true;
+				cartRepository.save(new Cart());
+				cart = cartRepository.findByCreatedBy(user.getId());
+			} else {
+				Set<ProductSummary> products = cart.getProducts();
+				for (ProductSummary p : products) {
+					if (p.getProductId().equals(productId)) {
+						p.setQuantity(p.getQuantity() + 1);
+						summary = p;
+						existingItem = true;
+					}
 				}
 			}
 			if (!existingItem) {
 				Optional<Product> productOpt = productRepository.findById(productId);
 				if (!productOpt.isPresent()) {
-					throw new NotFoundException("No product found for the givrn product_id : " + productId);
+					throw new NotFoundException("No product found for the given product_id : " + productId);
 				}
-				ProductSummary summary = AppUtil.createProductSummmary(productOpt.get());
-				calculateProductAmount(summary);
-				cart.addProduct(summary);
+				summary = AppUtil.createProductSummmary(productOpt.get());
+				summary.setCart(cart);
 			}
-			calculateCartTotal(cart);
+			summary = calculateProductAmount(summary);
+			cart.getProducts().add(summary);
+			cart = calculateCartTotal(cart);
 			cartRepository.save(cart);
 			return cart;
+
 		} catch (Exception e) {
 			throw e;
 		}
@@ -106,26 +112,32 @@ public class CartServiceImpl implements CartService {
 		}
 	}
 
-	
 	@Override
 	public Cart removeProductFromCart(Long id) {
 		try {
-			Optional<ProductSummary> productOpt = productSummaryRepository.findById(id);
-			if (!productOpt.isPresent()) {
-				throw new NotFoundException("No product found in the cart to delete for the given id: " + id);
+			ProductSummary summary=null;
+			Cart cart = cartRepository.findByCreatedBy(SecurityUtil.getUser().getId());
+			if (cart ==null) {
+				throw new NotFoundException("No cart found for the given cart item");
 			}
-			productSummaryRepository.delete(productOpt.get());
-			Optional<Cart> cartOpt = cartRepository.findById(productOpt.get().getCart().getId());
-			if (!cartOpt.isPresent()) {
-				throw new NotFoundException("No cart found for the given cartItem: " + id);
-			} else {
-				return cartOpt.get();
+			Set<ProductSummary> products = cart.getProducts();
+			for (ProductSummary p : products) {
+				if (p.getId().equals(id)) {
+					summary=p;
+					break;
+				}
 			}
+			products.remove(summary);
+			cart.setProducts(products);
+			cart = calculateCartTotal(cart);
+			cartRepository.save(cart);
+			return cart;
+
 		} catch (Exception e) {
 			throw e;
 		}
 	}
-	
+
 	@Override
 	public CartCheckOutResponse createOrderForCart(MyUserDetail user, Long cartId) {
 		try {
@@ -135,16 +147,17 @@ public class CartServiceImpl implements CartService {
 			}
 			Order newOrder = new Order();
 			newOrder.setOrderNumber(AppUtil.randomAlphaNumeric(10));
-			newOrder.setOrderTotal(cart.getTotalPrice());
+			newOrder.setOrderTotal(cart.getTotalDiscountedPrice());
 			newOrder.setShippingCharge(cart.getTotalCargoPrice());
-			newOrder.setPayableAmount(cart.getTotalPrice() + cart.getTotalCargoPrice());
+			newOrder.setPayableAmount(cart.getTotalDiscountedPrice() + cart.getTotalCargoPrice());
 			newOrder.setStatus(OrderStatus.Created);
 			newOrder.setStatusComment(ORDER_CREATED_COMMENT);
-			Order savedOrder = orderRepository.save(newOrder);	
+			newOrder.setCoupon(null);
+			Order savedOrder = orderRepository.save(newOrder);
 			Optional<User> loggedInUserOpt = userRepository.findById(user.getId());
-			if(!loggedInUserOpt.isPresent()) {
+			if (!loggedInUserOpt.isPresent()) {
 				throw new NotFoundException("No user found");
-			}			
+			}
 			CartCheckOutResponse response = new CartCheckOutResponse();
 			response.setName(loggedInUserOpt.get().getName());
 			response.setEmail(loggedInUserOpt.get().getEmail());
@@ -157,7 +170,7 @@ public class CartServiceImpl implements CartService {
 		}
 	}
 
-	private void calculateProductAmount(ProductSummary p) {
+	private ProductSummary calculateProductAmount(ProductSummary p) {
 		if (p.getPrice() != null) {
 			float totalAmount = (p.getPrice() * p.getQuantity());
 			p.setAmount(totalAmount);
@@ -169,20 +182,24 @@ public class CartServiceImpl implements CartService {
 				p.setDiscountedAmount(totalAmount);
 			}
 		}
+		return p;
 	}
 
-	private void calculateCartTotal(Cart cart) {
-		Float totalPrice = 0F;
+	private Cart calculateCartTotal(Cart cart) {
+		Float totalactualPrice = 0F;
+		Float totaldiscountedPrice = 0F;
 		Float totalShippingPrice = 0F;
 
 		for (ProductSummary ps : cart.getProducts()) {
-			System.out.println("amount " + ps.getAmount());
-			totalPrice = totalPrice + ps.getAmount();
+
+			totalactualPrice = totalactualPrice + ps.getAmount();
+			totaldiscountedPrice = totaldiscountedPrice + ps.getDiscountedPrice();
 			totalShippingPrice = totalShippingPrice + ps.getShippingPrice();
 		}
-
-		cart.setTotalPrice(roundTwoDecimals(totalPrice));
+		cart.setTotalActualPrice(roundTwoDecimals(totalactualPrice));
+		cart.setTotalDiscountedPrice(roundTwoDecimals(totaldiscountedPrice));
 		cart.setTotalCargoPrice(roundTwoDecimals(totalShippingPrice));
+		return cart;
 	}
 
 	private float roundTwoDecimals(float d) {
@@ -190,5 +207,4 @@ public class CartServiceImpl implements CartService {
 		return Float.valueOf(twoDForm.format(d));
 	}
 
-	
 }

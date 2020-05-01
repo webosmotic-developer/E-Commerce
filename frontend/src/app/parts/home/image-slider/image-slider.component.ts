@@ -16,7 +16,7 @@ export class ImageSliderComponent implements OnInit {
   ];
 
   constructor(config: NgbCarouselConfig) {
-    config.interval = 10000;
+    config.interval = 5000;
     config.wrap = true;
     config.keyboard = false;
   }

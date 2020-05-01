@@ -36,7 +36,7 @@ public class Product extends BaseEntity implements Serializable {
 
 	@Column(name = "name")
 	@NotBlank
-	private String name;
+	private String name;	
 
 	@Column(name = "unit_price")
 	private Float unitPrice;

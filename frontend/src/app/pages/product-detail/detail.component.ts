@@ -6,6 +6,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {NgbRatingConfig} from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 
+
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
@@ -30,7 +31,7 @@ export class DetailComponent implements OnInit {
   ) {
     config.max = 5;
     config.readonly = false;
-    const id  = this.route.snapshot.paramMap.get('id')
+    const id  = this.route.snapshot.paramMap.get('id');
     this.getProductDetail(id);
     this.getMaostSelling();
   }
@@ -46,10 +47,10 @@ export class DetailComponent implements OnInit {
     if (id != null) {
       this.productService.getDetail(id).subscribe(
         prod => {
-          console.log("prod========", prod);
+          console.log('prod========', prod);
           this.productInfo = prod.data;
           this.calculateTheFinalPrice(prod.data.unitPrice, prod.data.discount);
-          console.log("prod========", this.productInfo);
+          console.log('prod========', this.productInfo);
           this.calculateDeliveryDate();
         },
         _ => console.log('Get Cart Failed')
@@ -61,7 +62,7 @@ export class DetailComponent implements OnInit {
     if (id != null) {
       this.productService.getRealtedProducts(id).subscribe(
         prod => {
-          console.log("prod========", prod);
+          console.log('prod========', prod);
           this.relatedProducts = prod.data;
         },
         _ => console.log('Get Cart Failed')
@@ -88,7 +89,7 @@ export class DetailComponent implements OnInit {
   calculateDeliveryDate() {
     const date = new Date();
     const dayOfMonth = date.getDate() + 2;
-    this.deliveredDate =  moment(date.setDate(dayOfMonth)).format("DD MMM, dddd ");
+    this.deliveredDate =  moment(date.setDate(dayOfMonth)).format('DD MMM, dddd ');
   }
 
 

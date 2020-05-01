@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -47,32 +48,36 @@ public class ProductServiceImpl implements ProductService {
 			throw new AppException(e.getMessage());
 		}
 	}
-
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<ProductDisplay> findCategoryProducts(int offset, int size, String sort, String category) {
 		try {
-			ProductCategory productCategory = productCategoryRepository.findByParentCategory(category);
-			if (productCategory != null) {
-				Pageable pageRequest = PageRequest.of(Math.floorDiv(offset, size), size, Sort.by(Direction.DESC, sort));
-				List<Product> products = productRepository.findByProductCategoryOrderByNameDesc(productCategory,
-						pageRequest);
+			Pageable pageRequest = PageRequest.of(offset, size, Sort.by(sort));
+			ProductSearchCriteria searchCriteria=new ProductSearchCriteria(category);
+			Specification specification = ProductSpecification.findBySearchCriteria(searchCriteria);
+			Page<Product> pageProducts = productRepository.findAll(specification,pageRequest);
+			List<Product> products=pageProducts.getContent();
+			if (!products.isEmpty() && products.size() > 0) {
 				return AppUtil.createProductDisplay(products);
 			} else {
 				return Collections.emptyList();
 			}
 		} catch (Exception e) {
-			throw e;
+			throw new AppException(e.getMessage());
+
 		}
+
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public List<ProductDisplay> SearchProducts(int offset, int size, String sort,
-			ProductSearchCriteria searchCriteria) {
+	public List<ProductDisplay> SearchProducts(int offset, int size,String sort,ProductSearchCriteria searchCriteria) {
 		try {
-			Pageable pageRequest = PageRequest.of(Math.floorDiv(offset, size), size, Sort.by(Direction.DESC, sort));
+			Pageable pageRequest = PageRequest.of(offset, size, Sort.by(sort));
 			Specification specification = ProductSpecification.findBySearchCriteria(searchCriteria);
-			List<Product> products = (List<Product>) productRepository.findAll(specification, pageRequest);
+			Page<Product> pageProducts = productRepository.findAll(specification,pageRequest);
+			List<Product> products=pageProducts.getContent();
 			if (!products.isEmpty() && products.size() > 0) {
 				return AppUtil.createProductDisplay(products);
 			} else {

@@ -2,11 +2,12 @@ import {AfterContentChecked, Component, OnDestroy, OnInit} from '@angular/core';
 import {CartService} from '../../services/cart.service';
 import {Subject, Subscription} from 'rxjs';
 import {UserService} from '../../services/user.service';
-import {JwtResponse} from '../../models/JwtResponse';
+
 import {ProductInOrder} from '../../models/ProductInOrder';
 import {debounceTime, switchMap} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Role} from '../../enum/Role';
+import {JwtResponse} from '../../response/JwtResponse';
 
 @Component({
   selector: 'app-cart',

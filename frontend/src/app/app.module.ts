@@ -25,38 +25,44 @@ import {HomeModule} from './parts/home/home.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { VerifyUserEmailComponent } from './pages/verify-user-email/verify-user-email.component';
 import { SignUpSuccessMessageComponent } from './pages/sign-up-success-message/sign-up-success-message.component';
+import {ProductsComponent} from './parts/products/products.component';
+import {SharedModule} from './shared/shared.module';
+import { FilterComponent } from './parts/products/filter/filter.component';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        NavigationComponent,
-        CardComponent,
-        PaginationComponent,
-        LoginComponent,
-        SignupComponent,
-        DetailComponent,
-        CartComponent,
-        OrderComponent,
-        OrderDetailComponent,
-        ProductListComponent,
-        UserDetailComponent,
-        ProductEditComponent,
-        FooterComponent,
-        VerifyUserEmailComponent,
-        SignUpSuccessMessageComponent,
-    ],
+  declarations: [
+    AppComponent,
+    NavigationComponent,
+    CardComponent,
+    PaginationComponent,
+    LoginComponent,
+    SignupComponent,
+    DetailComponent,
+    CartComponent,
+    OrderComponent,
+    OrderDetailComponent,
+    ProductListComponent,
+    UserDetailComponent,
+    ProductEditComponent,
+    FooterComponent,
+    VerifyUserEmailComponent,
+    SignUpSuccessMessageComponent,
+    ProductsComponent,
+    FilterComponent,
+  ],
     imports: [
-      BrowserModule,
-      AppRoutingModule,
-      FormsModule,
-      HttpClientModule,
-      HomeModule,
-      NgbModule,
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule,
+        HomeModule,
+        NgbModule,
+        SharedModule,
     ],
-    providers: [CookieService,
-        {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
-        {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}],
-    bootstrap: [AppComponent]
+  providers: [CookieService,
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

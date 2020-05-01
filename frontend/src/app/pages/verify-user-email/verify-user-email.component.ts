@@ -22,14 +22,14 @@ export class VerifyUserEmailComponent implements OnInit {
   }
 
   verifyUser(token: string){
-    console.log("token==========" , token);
+    console.log('token==========' , token);
     this.userService.verifyUser(token).subscribe((user) => {
       console.log(user);
       this.show = true;
       if (user != null) {
         this.message = user;
       } else {
-        this.message = "User verification failed";
+        this.message = 'User verification failed';
       }
     });
   }

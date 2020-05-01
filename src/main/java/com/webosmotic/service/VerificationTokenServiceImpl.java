@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.webosmotic.Enum.TokenType;
@@ -26,6 +27,8 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 	VerificationtokenRepository verificationRepository;
 	@Autowired
 	EmailService emailService;
+	@Autowired
+	Environment env;
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
@@ -75,9 +78,9 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 	private void sendEmailForRegistration(String token, User user, String appUrl) {
 		String recipientAddress = user.getEmail();
 		String subject = "Registration Confirmation";
-		String confirmationUrl = "/verify-email?token=" + token;
+		String confirmationUrl = "/auth/verify-email?token=" + token;
 		String message = "Congratulation !! Your account has been craeted please click on the link below to verify your email";
-		String text = message + "\n" +   "http://localhost:4200" + confirmationUrl;
+		String text = message + "\n" +   env.getProperty("app.baseurl") + confirmationUrl;
 		emailService.sendSimpleMessageForRegisteration(recipientAddress, subject, text);
 	}
 
@@ -89,9 +92,9 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 	private void sendEmailForForgotPassword(String token, User user, String appUrl) {
 		String recipientAddress = user.getEmail();
 		String subject = "Reset Password";
-		String url = appUrl + "/changePassword?id=" + user.getId() + "&token=" + token;
+		String url = appUrl + "/auth/changePassword?id=" + user.getId() + "&token=" + token;
 		String message = "Congratulation !! Your aqccount has been craeted please click on the link below to verify your email";
-		String text = message + " rn" + "http://localhost:8080" + url;
+		String text = message + " rn " + env.getProperty("app.baseurl") + url;
 		emailService.sendSimpleMessageForForgotPassword(recipientAddress, subject, text);
 	}
 

@@ -4,6 +4,7 @@ import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {ProductInfo} from '../models/productInfo';
 import {apiUrl} from '../../environments/environment';
+import {SearchCriteria} from '../models/SearchCriteria';
 
 @Injectable({
   providedIn: 'root'
@@ -21,13 +22,13 @@ export class ProductService {
     return this.http.get(url);
   }
 
-  getRecentlyAdded() : Observable<any>{
+  getRecentlyAdded(): Observable<any> {
     const url = this.appUrl + '/product/recent';
     return this.http.get(url);
   }
 
 
-  getMostSelling () : Observable<any> {
+  getMostSelling (): Observable<any> {
     const url = this.appUrl + '/product/mostselling';
     return this.http.get(url);
   }
@@ -37,6 +38,10 @@ export class ProductService {
     return this.http.get(url);
   }
 
+  getSearchProducts (searchCriteria: SearchCriteria): Observable<any> {
+    const url = this.appUrl + '/product/search';
+    return this.http.post(url, searchCriteria);
+  }
 
   getCategoryInPage(categoryType: number, page: number, size: number): Observable<any> {
     const url = `${this.categoryUrl}/${categoryType}?page=${page}&size=${size}`;

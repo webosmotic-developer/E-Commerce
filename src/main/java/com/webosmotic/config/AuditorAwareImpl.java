@@ -12,29 +12,31 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.webosmotic.controller.AuthController;
 import com.webosmotic.pojo.MyUserDetail;
 
-public class AuditorAwareImpl implements AuditorAware<Long>{
-	
+public class AuditorAwareImpl implements AuditorAware<Long> {
+
 	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-	  @Override
-	    public Optional<Long> getCurrentAuditor() {
-	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	@Override
+	public Optional<Long> getCurrentAuditor() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		/*
 		 * if (authentication == null || !authentication.isAuthenticated() ||
 		 * authentication instanceof AnonymousAuthenticationToken) { return
 		 * Optional.empty(); }
 		 */
-	        MyUserDetail userPrincipal = (MyUserDetail) authentication.getPrincipal();
-	        logger.info("userPrincipal" + " " + userPrincipal.getId());
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			MyUserDetail userPrincipal = (MyUserDetail) authentication.getPrincipal();
+			logger.info("userPrincipal" + " " + userPrincipal.getId());
 
-	        if(userPrincipal != null && userPrincipal.getId() != null) {
-	        	return Optional.of(userPrincipal.getId());
-	        }else {
-	        	return Optional.empty();
-	        }
-	    }
-	
-	
+			if (userPrincipal != null && userPrincipal.getId() != null) {
+				return Optional.of(userPrincipal.getId());
+			} else {
+				return Optional.empty();
+			}
+		} else {
+			return Optional.empty();
+		}
+	}
 
 }

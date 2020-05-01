@@ -14,9 +14,12 @@ import {ProductEditComponent} from './pages/product-edit/product-edit.component'
 import {Role} from './enum/Role';
 import {HomeComponent} from './parts/home/home.component';
 import {VerifyUserEmailComponent} from './pages/verify-user-email/verify-user-email.component';
+import {ProductsComponent} from './parts/products/products.component';
+
 
 const routes: Routes = [
   {path: '', redirectTo: '/product', pathMatch: 'full'},
+  {path: 'products',  component: ProductsComponent},
   {path: 'verify-email',  component: VerifyUserEmailComponent},
   {path: 'product', component: HomeComponent},
   {path: 'product/:id', component: DetailComponent},

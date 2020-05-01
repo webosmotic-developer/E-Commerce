@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +49,22 @@ public class ProductController {
 			throw new AppException(e.getMessage());
 		}
 	}
+	
+	
+	@Secured({"ROLE_SELLER","ROLE_ADMIN"})
+	@RequestMapping(value = "/category/save", method = RequestMethod.POST)
+	public ResponseEntity<ApiResponse<List<ProductCategory>>> saveProductCategory(
+			@RequestBody List<ProductCategory> category) {
+		ApiResponse<List<ProductCategory>> response = new ApiResponse<>();
+		try {
+			List<ProductCategory> savedProducts = productService.saveProductCategory(category);
+			response.setSuccess(true);
+			response.setData(savedProducts);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			throw new AppException(e.getMessage());
+		}
+	}
 
     /* 
      * API to fetch the products for the given product category
@@ -76,7 +93,7 @@ public class ProductController {
      * @QueryParam Integer offset , Integer size, String sort, ProductSearch searchCriteria
      * @return Product list
      */	
-	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getProductsBykeyword(
 			@RequestParam(name = "offset", defaultValue = "0") int offset,
 			@RequestParam(name = "size", defaultValue = "25") int size,
@@ -84,7 +101,7 @@ public class ProductController {
 			@RequestBody ProductSearchCriteria searchCriteria) {
 		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
 		try {
-			List<ProductDisplay> products = productService.SearchProducts(offset, size, sort, searchCriteria);
+			List<ProductDisplay> products = productService.SearchProducts(offset, size,sort,searchCriteria);
 			response.setSuccess(true);
 			response.setData(products);
 			return new ResponseEntity<>(response, HttpStatus.OK);
@@ -165,7 +182,7 @@ public class ProductController {
 			throw new AppException(e.getMessage());
 		}
 	}
-	
+	@Secured({"ROLE_SELLER","ROLE_ADMIN"})
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<ApiResponse<List<Product>>> saveNewProduct(
 			@RequestBody List<Product> products) {
@@ -180,22 +197,8 @@ public class ProductController {
 		}
 	}
 	
-	
-	@RequestMapping(value = "/category/save", method = RequestMethod.POST)
-	public ResponseEntity<ApiResponse<List<ProductCategory>>> saveProductCategory(
-			@RequestBody List<ProductCategory> category) {
-		ApiResponse<List<ProductCategory>> response = new ApiResponse<>();
-		try {
-			List<ProductCategory> savedProducts = productService.saveProductCategory(category);
-			response.setSuccess(true);
-			response.setData(savedProducts);
-			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
-			throw new AppException(e.getMessage());
-		}
-	}
-	
-	@RequestMapping(value = "/review/{pid}/save", method = RequestMethod.POST)
+		@Secured({"ROLE_BUYER","ROLE_ADMIN"})
+		@RequestMapping(value = "/review/{pid}/save", method = RequestMethod.POST)
 	public ResponseEntity<ApiResponse<ProductReview>> saveProductReview(
 			@RequestBody ProductReview review,
 			@PathVariable ("pid") Long pid) {
@@ -210,7 +213,6 @@ public class ProductController {
 			throw new AppException(e.getMessage());
 		}
 	}
-	
-	
+		
 	
 }

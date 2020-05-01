@@ -93,9 +93,9 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public User createUser(SignupRequest signupRequest) {
 		try {
-			Role existingRole = roleRepository.findByName(RoleType.Role_Buyer);
+			Role existingRole = roleRepository.findByName(RoleType.ROLE_BUYER);
 			if(existingRole == null) {
-				existingRole = new Role(RoleType.Role_Buyer, "Buyer");
+				existingRole = new Role(RoleType.ROLE_BUYER, "BUYER");
 			}
 			User newUser = new User();
 			newUser.setName(signupRequest.getName());
@@ -121,12 +121,12 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public User createSocialUser(User user, AuthProvider provider) {
 		try {
-			Role existingRole = roleRepository.findByName(RoleType.Role_Buyer);
+			Role existingRole = roleRepository.findByName(RoleType.ROLE_BUYER);
 			if(existingRole == null) {
-				existingRole = new Role(RoleType.Role_Buyer, "Buyer");
+				existingRole = new Role(RoleType.ROLE_BUYER, "Buyer");
 			}
 			user.setProvider(provider);
-			Role role = new Role(RoleType.Role_Buyer, "Buyer");
+			Role role = new Role(RoleType.ROLE_BUYER, "Buyer");
 			user.getRoles().add(role);
 			user.getRoles().add(existingRole);
 			user.setPassword(passwordEncoder.encode(user.getPassword()));

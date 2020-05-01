@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import {UserService} from '../user.service';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {JwtResponse} from '../../models/JwtResponse';
+
 import {CookieService} from 'ngx-cookie-service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
+import {JwtResponse} from '../../response/JwtResponse';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
   public nameTerms:  BehaviorSubject<string>;
   public name$: Observable<string>;
   public currentUserSubject: BehaviorSubject<JwtResponse>;

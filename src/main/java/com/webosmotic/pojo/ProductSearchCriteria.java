@@ -1,5 +1,9 @@
 package com.webosmotic.pojo;
 
+/**
+ * @author ADMIN
+ *
+ */
 public class ProductSearchCriteria {
 
 	private String name;
@@ -8,10 +12,31 @@ public class ProductSearchCriteria {
 	private String brand;
 	private String description;
 	private int discount;
-	private int price;
+	private int unitPrice;
 	private int minPrice;
 	private int maxPrice;
+	private int minDiscount;
+	private int maxDiscount;
 	private String all;
+	
+	public ProductSearchCriteria() {
+		super();
+	}
+	
+	public ProductSearchCriteria(String category) {
+		this.subCategory="";
+		this.category=category;
+		this.name="";
+		this.brand="";
+		this.description="";
+		this.discount=0;
+		this.unitPrice=0;
+		this.minDiscount=0;
+		this.maxDiscount=0;
+		this.all="";
+		this.minPrice=0;
+		this.maxPrice=0;
+	}
 
 	public String getName() {
 		return name;
@@ -69,13 +94,6 @@ public class ProductSearchCriteria {
 		this.maxPrice = maxPrice;
 	}
 
-	public int getPrice() {
-		return price;
-	}
-
-	public void setPrice(int price) {
-		this.price = price;
-	}
 
 	public String getDescription() {
 		return description;
@@ -93,5 +111,27 @@ public class ProductSearchCriteria {
 		this.all = all;
 	}
 
-	
+	public int getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(int unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+	public int getMinDiscount() {
+		return minDiscount;
+	}
+
+	public void setMinDiscount(int minDiscount) {
+		this.minDiscount = minDiscount;
+	}
+
+	public int getMaxDiscount() {
+		return maxDiscount;
+	}
+
+	public void setMaxDiscount(int maxDiscount) {
+		this.maxDiscount = maxDiscount;
+	}
+
 }

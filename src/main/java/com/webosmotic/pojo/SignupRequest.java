@@ -41,13 +41,13 @@ public class SignupRequest {
 	}
 	@Override
 	public String toString() {
-		return "SignupRequest [username=" + username + ", email=" + email + ", password=" + password + "]";
+		return "SignupRequest [username=" + username +", name="+name +", email=" + email + ", password=" + password + "]";
 	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
 
+	}
 }

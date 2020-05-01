@@ -25,6 +25,7 @@ import com.webosmotic.service.UserService;
  * token. If contains JWT token then validate the token and pass the request If
  * not then pass the request.
  */
+
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -41,7 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
 	@Transactional
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-
+		
 		final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 		String jwt = getToken(request);
@@ -51,13 +52,12 @@ public class JwtFilter extends OncePerRequestFilter {
 				User user = userService.getUserByUserName(userName);
 				// if jwt ok, then authenticate
 				MyUserDetail userDetails = new MyUserDetail(user);
-				SimpleGrantedAuthority sga = new SimpleGrantedAuthority("Role_Buyer");
-				ArrayList<SimpleGrantedAuthority> list = new ArrayList<>();
-				list.add(sga);
+				//SimpleGrantedAuthority sga = new SimpleGrantedAuthority("Role_Buyer");
+				//ArrayList<SimpleGrantedAuthority> list = new ArrayList<>();
+				//list.add(sga);
 				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails,
-						null, list);
+						null, userDetails.getAuthorities());
 				SecurityContextHolder.getContext().setAuthentication(auth);
-
 			} catch (Exception e) {
 				logger.error("Set Authentication from JWT failed");
 			}
@@ -71,11 +71,11 @@ public class JwtFilter extends OncePerRequestFilter {
 	 * @Return extracted JWT Token
 	 */
 	private String getToken(HttpServletRequest request) {
-		String authHeader = request.getHeader("Authorization");
+		final String authHeader = request.getHeader("Authorization");
 		logger.info("authHeader" + " " + authHeader);
 		logger.info("authHeader" + " " + request.getRequestURI());
 		if (authHeader != null && authHeader.startsWith("Bearer ")) {
-			return authHeader.replace("Bearer ", "");
+			return authHeader.substring(7);
 		}
 		return null;
 	}
