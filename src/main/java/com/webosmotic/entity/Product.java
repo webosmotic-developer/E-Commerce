@@ -21,7 +21,6 @@ import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
 @Entity
 @Table(name = "product")
 @AttributeOverride(name = "id", column = @Column(name = "product_id"))
@@ -29,14 +28,14 @@ public class Product extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "category_id")
 	@JsonIgnoreProperties("productList")
 	private ProductCategory productCategory;
 
 	@Column(name = "name")
 	@NotBlank
-	private String name;	
+	private String name;
 
 	@Column(name = "unit_price")
 	private Float unitPrice;
@@ -46,7 +45,7 @@ public class Product extends BaseEntity implements Serializable {
 	@NotBlank
 	private String description;
 
-	@Column(name = "sku" , unique = true)
+	@Column(name = "sku", unique = true)
 	@NaturalId
 	@NotBlank
 	private String SKU;
@@ -66,16 +65,16 @@ public class Product extends BaseEntity implements Serializable {
 
 	@Column(name = "sell_count")
 	private Integer sellCount;
-	
+
 	@Column(columnDefinition = "BOOLEAN")
 	private boolean showTag;
-	
+
 	private String brand;
-	
+
 	private float discount;
-	
+
 	private String seller;
-	
+
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<ProductReview> reviews = new ArrayList<>();
 
@@ -95,8 +94,6 @@ public class Product extends BaseEntity implements Serializable {
 		this.name = name;
 	}
 
-
-
 	public String getSKU() {
 		return SKU;
 	}
@@ -104,8 +101,6 @@ public class Product extends BaseEntity implements Serializable {
 	public void setSKU(String sKU) {
 		SKU = sKU;
 	}
-
-	
 
 	public Float getShippingPrice() {
 		return shippingPrice;
@@ -131,7 +126,6 @@ public class Product extends BaseEntity implements Serializable {
 		this.image = image;
 	}
 
-	
 	public boolean isShowTag() {
 		return showTag;
 	}
@@ -159,9 +153,9 @@ public class Product extends BaseEntity implements Serializable {
 	@Override
 	public String toString() {
 		return "Product [productCategory=" + productCategory + ", name=" + name + ", price=" + unitPrice + ", longDesc="
-				+ description + ", SKU=" + SKU + ", stock=" + stock + ", shippingPrice=" + shippingPrice + ", taxPercent="
-				+ taxPercent + ", image=" + image + ", sellCount=" + sellCount + ", showTag=" + showTag + ", brand="
-				+ brand + ", discount=" + discount + "]";
+				+ description + ", SKU=" + SKU + ", stock=" + stock + ", shippingPrice=" + shippingPrice
+				+ ", taxPercent=" + taxPercent + ", image=" + image + ", sellCount=" + sellCount + ", showTag="
+				+ showTag + ", brand=" + brand + ", discount=" + discount + "]";
 	}
 
 	public Float getUnitPrice() {
@@ -211,6 +205,5 @@ public class Product extends BaseEntity implements Serializable {
 	public void setReviews(List<ProductReview> reviews) {
 		this.reviews = reviews;
 	}
-	
-	
+
 }

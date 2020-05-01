@@ -1,13 +1,11 @@
 package com.webosmotic.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -43,7 +41,7 @@ public class AppSecurtiyConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
-	/* Passing the custom userDetaile service and passwordEncoder  */
+	/* Passing the custom userDetaile service and passwordEncoder */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(myuserDetailService).passwordEncoder(passwordEncoder);
@@ -59,14 +57,14 @@ public class AppSecurtiyConfig extends WebSecurityConfigurerAdapter {
 	public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
 		return new HttpCookieOAuth2AuthorizationRequestRepository();
 	}
-	
+
 	/* Configuration which request is allowed and with which roles. */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.authorizeRequests().antMatchers("/auth/**","/api/users/**","/product/**","/").permitAll()
-				.anyRequest().authenticated();
-		
+		http.authorizeRequests().antMatchers("/auth/**", "/api/users/**", "/product/**", "/").permitAll().anyRequest()
+				.authenticated();
+
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(myAuthenticationEntryPoint)
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
@@ -77,6 +75,5 @@ public class AppSecurtiyConfig extends WebSecurityConfigurerAdapter {
 
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	}
-	
-	
+
 }

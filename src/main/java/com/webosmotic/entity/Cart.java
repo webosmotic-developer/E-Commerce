@@ -1,8 +1,6 @@
 package com.webosmotic.entity;
 
 import java.io.Serializable;
-
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,28 +20,26 @@ public class Cart extends UserAudit implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL,  fetch = FetchType.EAGER, orphanRemoval = true)
-    private Set<ProductSummary> products = new HashSet<>();
+	@OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	private Set<ProductSummary> products = new HashSet<>();
 
-    @Column(name = "total_price")
-    @NotNull
-    private Float totalActualPrice;  //totalActualPrice= will be the value customer pay without any discount
-    
-    @Column(name = "total_discounted_price")
-    @NotNull
-    private Float totalDiscountedPrice; //totalDiscountedPrice= will be the value customer pay for product
+	@Column(name = "total_price")
+	@NotNull
+	private Float totalActualPrice; // totalActualPrice= will be the value customer pay without any discount
 
-    @Column(name = "total_Shipping_price")
-    @NotNull
-    private Float totalCargoPrice;
-    
-    
+	@Column(name = "total_discounted_price")
+	@NotNull
+	private Float totalDiscountedPrice; // totalDiscountedPrice= will be the value customer pay for product
+
+	@Column(name = "total_Shipping_price")
+	@NotNull
+	private Float totalCargoPrice;
 
 	public Cart() {
 		super();
 		this.totalActualPrice = 0f;
 		this.totalDiscountedPrice = 0f;
-		this.totalCargoPrice =0f;
+		this.totalCargoPrice = 0f;
 	}
 
 	public Float getTotalCargoPrice() {
@@ -78,5 +74,4 @@ public class Cart extends UserAudit implements Serializable {
 		this.totalDiscountedPrice = totalDiscountedPrice;
 	}
 
-	
 }

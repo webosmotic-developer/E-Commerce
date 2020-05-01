@@ -46,13 +46,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
 		_log.info("0): {}", oAuth2UserRequest);
-		OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
+		final OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
 		_log.info("1): {}", oAuth2User);
 		try {
 			return processOAuth2User(oAuth2UserRequest, oAuth2User);
-		} catch (AuthenticationException ex) {
+		} catch (final AuthenticationException ex) {
 			throw ex;
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			_log.warn("2): ", ex);
 			// Throwing an instance of AuthenticationException will trigger the
 			// OAuth2AuthenticationFailureHandler
@@ -61,7 +61,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	}
 
 	private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
-		OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(
+		final OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(
 				oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
 		_log.info("3): {}", oAuth2UserInfo);
 
@@ -88,16 +88,18 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 	/*
 	 * Method to create the new user and save into the database.
+	 * 
 	 * @Param OAuth2UserRequest , OAuth2UserInfo
+	 * 
 	 * @Retuen User
 	 */
 	private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
-		User user = new User();
+		final User user = new User();
 		user.setName(oAuth2UserInfo.getName());
 		user.setEmail(oAuth2UserInfo.getEmail());
 		user.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
 		user.setProviderId(oAuth2UserInfo.getId());
-		Role role = new Role(RoleType.ROLE_BUYER, "Buyer");
+		final Role role = new Role(RoleType.ROLE_BUYER, "Buyer");
 		user.getRoles().add(role);
 		user.setEnable(true);
 		user.setVerifiedTime(LocalDateTime.now());
@@ -106,8 +108,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	}
 
 	/*
-	 * Method to update the existing user. 
+	 * Method to update the existing user.
+	 * 
 	 * @Param User , OAuth2UserInfo
+	 * 
 	 * @Retuen User
 	 */
 	private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {

@@ -19,14 +19,16 @@ import com.webosmotic.pojo.ProductDisplay;
 public class AppUtil {
 
 	private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-	
+
 	/*
 	 * method to check the given token is expired or not
-	 * @Param String token 
+	 * 
+	 * @Param String token
+	 * 
 	 * @Return boolean
 	 */
 	public static boolean checkForTokenExpiration(LocalDateTime passToken) {
-		if(passToken.isAfter(passToken.plusDays(1))) {
+		if (passToken.isAfter(passToken.plusDays(1))) {
 			return true;
 		} else {
 			return false;
@@ -36,19 +38,21 @@ public class AppUtil {
 	/*
 	 * method to calculate the Date with the given hours ahead for the token
 	 * expiration
-	 * @Param int hour 
+	 * 
+	 * @Param int hour
+	 * 
 	 * @Return LocalDateTime
 	 */
 	public static LocalDateTime calculateExpiryDate(int hours) {
-		LocalDateTime currentDateTime = LocalDateTime.now(ZoneOffset.UTC);
-		LocalDateTime nextTime = currentDateTime.plusHours(hours);
+		final LocalDateTime currentDateTime = LocalDateTime.now(ZoneOffset.UTC);
+		final LocalDateTime nextTime = currentDateTime.plusHours(hours);
 		return nextTime;
 	}
-	
+
 	public static List<ProductDisplay> createProductDisplay(List<Product> products) {
-		List<ProductDisplay> productDisplays = new ArrayList<>();
+		final List<ProductDisplay> productDisplays = new ArrayList<>();
 		products.forEach(p -> {
-			ProductDisplay display = new ProductDisplay();
+			final ProductDisplay display = new ProductDisplay();
 			display.setId(p.getId());
 			display.setCategory(p.getProductCategory());
 			display.setImages(p.getImage());
@@ -63,9 +67,9 @@ public class AppUtil {
 		});
 		return productDisplays;
 	}
-	
+
 	public static ProductSummary createProductSummmary(Product product) {
-		ProductSummary summary = new ProductSummary();
+		final ProductSummary summary = new ProductSummary();
 		summary.setProductId(product.getId());
 		summary.setName(product.getName());
 		summary.setCategory(product.getProductCategory().getParentCategory());
@@ -81,16 +85,13 @@ public class AppUtil {
 	}
 
 	public static String randomAlphaNumeric(int count) {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append("OD");
 		while (count-- != 0) {
-			int character = (int) (Math.random() * ALPHA_NUMERIC_STRING.length());
+			final int character = (int) (Math.random() * ALPHA_NUMERIC_STRING.length());
 			builder.append(ALPHA_NUMERIC_STRING.charAt(character));
 		}
 		return builder.toString();
 	}
-	
-	
-	
 
 }

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -17,9 +18,9 @@ import com.webosmotic.entity.User;
 
 public class OAuthUserImpl implements OAuth2User {
 
-	private List<GrantedAuthority> authorities;
-	private Map<String, Object> attributes;
-	private String name;
+	private final List<GrantedAuthority> authorities;
+	private final Map<String, Object> attributes;
+	private final String name;
 
 	public OAuthUserImpl(User user, Map<String, Object> attributes) {
 		this.authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName().name()))

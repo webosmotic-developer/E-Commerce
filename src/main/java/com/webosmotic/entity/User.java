@@ -27,7 +27,7 @@ import com.webosmotic.Enum.Gender;
 
 /**
  * Main Entity Class describing the User details, address and roles
- * 
+ *
  */
 
 @Entity
@@ -57,7 +57,7 @@ public class User extends BaseEntity implements Serializable {
 
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
-	
+
 	private String providerId;
 
 	private LocalDateTime verifiedTime;
@@ -66,8 +66,7 @@ public class User extends BaseEntity implements Serializable {
 	private List<Address> adresses = new ArrayList<>();
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL) // LAZY - no session ?? TODO troubleshoot
-	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"), 
-	inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
+	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
 	private List<Role> roles = new ArrayList<>();
 
 	public String getPassword() {
@@ -110,8 +109,6 @@ public class User extends BaseEntity implements Serializable {
 		this.username = username;
 	}
 
-	
-
 	public AuthProvider getProvider() {
 		return provider;
 	}
@@ -142,7 +139,7 @@ public class User extends BaseEntity implements Serializable {
 	public void setEnable(Boolean enable) {
 		this.enable = enable;
 	}
-	
+
 	public LocalDateTime getVerifiedTime() {
 		return verifiedTime;
 	}
@@ -150,9 +147,9 @@ public class User extends BaseEntity implements Serializable {
 	public void setVerifiedTime(LocalDateTime verifiedTime) {
 		this.verifiedTime = verifiedTime;
 	}
-	
+
 	public void addAddress(Address address) {
-		if(address != null) {
+		if (address != null) {
 			adresses.add(address);
 		}
 		address.setUser(this);

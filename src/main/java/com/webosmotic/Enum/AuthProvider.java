@@ -1,10 +1,8 @@
 package com.webosmotic.Enum;
 
 /**
- *  Enum containing the different Auth provider 
+ * Enum containing the different Auth provider
  */
-public enum AuthProvider {	
-	Local,
-    Facebook,
-    Google
+public enum AuthProvider {
+	Local, Facebook, Google
 }

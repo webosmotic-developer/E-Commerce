@@ -2,6 +2,7 @@ package com.webosmotic.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -22,7 +23,7 @@ public class VerificationToken implements Serializable {
 
 	/**
 	 * Entity Class describing the verification token details
-	 * 
+	 *
 	 */
 
 	private static final long serialVersionUID = 1L;

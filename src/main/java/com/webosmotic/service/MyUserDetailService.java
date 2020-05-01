@@ -23,13 +23,15 @@ public class MyUserDetailService implements UserDetailsService {
 
 	/*
 	 * Method to get the UserDetails during the User login process.
+	 * 
 	 * @Param String userName
+	 * 
 	 * @Return Spring Security UserDetails class.
 	 */
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) {
-		User user = userService.getUserByUserName(username);
+		final User user = userService.getUserByUserName(username);
 		if (user != null) {
 			return MyUserDetail.create(user);
 		} else {

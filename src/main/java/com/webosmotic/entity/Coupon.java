@@ -21,43 +21,41 @@ import com.webosmotic.Enum.CouponType;
 
 @Entity
 @AttributeOverride(name = "id", column = @Column(name = "coupon_id"))
-@Table (name = "coupons")
+@Table(name = "coupons")
 public class Coupon extends BaseEntity implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
-	@Column(name = "coupon_name",unique = true)
+
+	@Column(name = "coupon_name", unique = true)
 	@NotEmpty
 	private String couponName;
-	
+
 	@NotNull
 	@Column(name = "type")
 	@Enumerated(EnumType.STRING)
 	private CouponType type;
-	
+
 	@Column(name = "flat_discount")
 	private int flatDiscount;
-	
-	
+
 	private float discount;
-	
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-	
+
 	@NotNull
 	@Column(name = "expiry_date")
 	private LocalDate expiryDate;
-	
-	
+
 	@Column(name = "min_order_value")
 	@NotNull
 	private int minOrderValue;
-	
+
 	@Column(name = "max_discount")
 	private int maxDiscount;
-	
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "coupon")
-	private List<Order> order= new ArrayList<>();
-	
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "coupon")
+	private final List<Order> order = new ArrayList<>();
+
 	public String getCouponName() {
 		return couponName;
 	}

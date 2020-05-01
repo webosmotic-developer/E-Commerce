@@ -12,17 +12,17 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class UserAudit extends BaseEntity implements Serializable{
+public abstract class UserAudit extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "created_by")
-    @CreatedBy
-    private Long createdBy;
- 
-    @Column(name = "modified_by")
-    @LastModifiedBy
-    private Long modifiedBy;
+	@CreatedBy
+	private Long createdBy;
+
+	@Column(name = "modified_by")
+	@LastModifiedBy
+	private Long modifiedBy;
 
 	public Long getCreatedBy() {
 		return createdBy;
@@ -40,5 +40,4 @@ public abstract class UserAudit extends BaseEntity implements Serializable{
 		this.modifiedBy = modifiedBy;
 	}
 
-	
 }

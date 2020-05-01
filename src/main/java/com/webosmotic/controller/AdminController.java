@@ -20,20 +20,20 @@ import com.webosmotic.service.AdminService;
 @RequestMapping("/admin")
 @Secured("ROLE_ADMIN")
 public class AdminController {
-	
+
 	@Autowired
 	AdminService adminService;
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "coupon/add", method = RequestMethod.POST)
 	public ResponseEntity<ApiResponse> AddCoupons(@RequestBody List<Coupon> coupons) {
-		ApiResponse response = new ApiResponse<>();
+		final ApiResponse response = new ApiResponse<>();
 		try {
 			adminService.addCoupons(coupons);
 			response.setSuccess(true);
 			response.setData("Coupons Added Successfully");
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}

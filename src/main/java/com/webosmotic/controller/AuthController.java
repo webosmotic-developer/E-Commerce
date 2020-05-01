@@ -2,8 +2,10 @@ package com.webosmotic.controller;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +62,9 @@ public class AuthController {
 
 	/*
 	 * API for Login into the system
+	 * 
 	 * @RequestBody LoginRequest containing userName and password
+	 * 
 	 * @Return Login Response with JWT token
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -73,22 +77,25 @@ public class AuthController {
 			if (existingUser != null && !existingUser.getEnable()) {
 				throw new UserNotFoundException("The given user email is not verified");
 			} else {
-				String username = existingUser.getUsername();
-				String password =  request.getPassword();
-				Authentication authentication = authenticationManager.authenticate(
-						new UsernamePasswordAuthenticationToken(username, password));
+				final String username = existingUser.getUsername();
+				final String password = request.getPassword();
+				final Authentication authentication = authenticationManager
+						.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-				String jwt = jwtProvider.generate(authentication);
-				return ResponseEntity.ok(new LoginResponse(jwt, existingUser.getEmail(), existingUser.getName(), existingUser.getRoles().get(0).getName()));
+				final String jwt = jwtProvider.generate(authentication);
+				return ResponseEntity.ok(new LoginResponse(jwt, existingUser.getEmail(), existingUser.getName(),
+						existingUser.getRoles().get(0).getName()));
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
 
 	/*
 	 * API to add the new user to the system
+	 * 
 	 * @RequestBody User object containing user details
+	 * 
 	 * @Return SignUp Response on adding the user to database and sending the
 	 * verification link to to the registered email with generated token
 	 */
@@ -102,21 +109,21 @@ public class AuthController {
 				throw new BadRequestException("The given email " + signupRequest.getEmail() + " is already in use.");
 			}
 			// creating the new user
-			User savedUser = userService.createUser(signupRequest);
+			final User savedUser = userService.createUser(signupRequest);
 			logger.info("savedUser" + " " + savedUser);
 			// sending the verification email
-			String appUrl = request.getContextPath();
+			final String appUrl = request.getContextPath();
 			logger.info("appUrl" + " " + appUrl);
 			verificationTokenService.createVerificationToken(savedUser, TokenType.Register, appUrl);
 			// creating an signUp response
-			SignUpResponse response = new SignUpResponse();
+			final SignUpResponse response = new SignUpResponse();
 			response.setMessage("Success!! An verification email is send to your register email.");
 			response.setUsername(savedUser.getUsername());
 			response.setEmail(savedUser.getEmail());
 			response.setSuccess(true);
 			logger.info("response" + " " + response);
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.info("user_error" + " " + e.getMessage());
 			throw new AppException(e.getMessage());
 		}
@@ -124,19 +131,22 @@ public class AuthController {
 
 	/*
 	 * API to verify the newly created user email
+	 * 
 	 * @RequestParam token
+	 * 
 	 * @Return the 200 OK response
 	 */
 	@RequestMapping(value = "/verify-email", method = RequestMethod.GET)
 	public ResponseEntity<String> confirmRegistration(HttpServletRequest request, Model model,
 			@RequestParam("token") String token) {
-		VerificationToken verificationToken = verificationTokenService.getVerificationToken(token, TokenType.Register);
+		final VerificationToken verificationToken = verificationTokenService.getVerificationToken(token,
+				TokenType.Register);
 		if (verificationToken == null) {
 			throw new UserNotFoundException("No token found for the given token");
 		}
-		boolean isTokenExpired = AppUtil.checkForTokenExpiration(verificationToken.getExpiryDate());
+		final boolean isTokenExpired = AppUtil.checkForTokenExpiration(verificationToken.getExpiryDate());
 		if (!isTokenExpired) {
-			User user = verificationToken.getUser();
+			final User user = verificationToken.getUser();
 			user.setEnable(true);
 			user.setVerifiedTime(LocalDateTime.now(ZoneOffset.UTC));
 			userService.saveUser(user);
@@ -149,37 +159,42 @@ public class AuthController {
 
 	/*
 	 * API to handle the request for forgot password request
+	 * 
 	 * @RequestParam User email
+	 * 
 	 * @Return 200 OK response and send an email with reset-password link
 	 */
 	@RequestMapping(value = "/forgot-password", method = RequestMethod.POST)
 	public ResponseEntity<?> resetPassword(HttpServletRequest request, @RequestParam("email") String userEmail) {
-		User user = userService.getUserByEmail(userEmail);
+		final User user = userService.getUserByEmail(userEmail);
 		if (user == null) {
 			throw new UserNotFoundException("No user found for the given user email: " + userEmail);
 		}
-		String appUrl = request.getContextPath();
+		final String appUrl = request.getContextPath();
 		verificationTokenService.createVerificationToken(user, TokenType.ResetPassword, appUrl);
 		return new ResponseEntity<>("Your password reset request has been sent to your regitered email", HttpStatus.OK);
 	}
 
 	/*
 	 * API to handle the request for password change
+	 * 
 	 * @RequestParam token
+	 * 
 	 * @Requestbody passwordDto with the new password
+	 * 
 	 * @Return the 200 OK response with new password save to the database
 	 */
 	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
 	public ResponseEntity<?> showChangePasswordPage(@RequestParam("token") String token,
 			@RequestBody ForgotPasswordRequest passwordDto) {
 
-		VerificationToken verificationToken = verificationTokenService.getVerificationToken(token,
+		final VerificationToken verificationToken = verificationTokenService.getVerificationToken(token,
 				TokenType.ResetPassword);
 		if (verificationToken == null) {
 			throw new UserNotFoundException("No token found for the given token");
 		}
-		User user = verificationToken.getUser();
-		boolean isTokenExpired = AppUtil.checkForTokenExpiration(verificationToken.getExpiryDate());
+		final User user = verificationToken.getUser();
+		final boolean isTokenExpired = AppUtil.checkForTokenExpiration(verificationToken.getExpiryDate());
 		if (!isTokenExpired) {
 			user.setPassword(passwordEncoder.encode(passwordDto.getPassword()));
 			userRepository.save(user);

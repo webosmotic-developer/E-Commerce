@@ -30,100 +30,107 @@ import com.webosmotic.util.SecurityUtil;
 @RequestMapping("/product")
 public class ProductController {
 
-    @Autowired
-    ProductService productService;
-    
-    /* 
-     * API to fetch the random products
-     * @return Product list
-     */	
+	@Autowired
+	ProductService productService;
+
+	/*
+	 * API to fetch the random products
+	 * 
+	 * @return Product list
+	 */
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getShowProducts() {
-		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
+		final ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
 		try {
-			List<ProductDisplay> products = productService.fetchShowProducts();
+			final List<ProductDisplay> products = productService.fetchShowProducts();
 			response.setSuccess(true);
 			response.setData(products);
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
-			throw new AppException(e.getMessage());
-		}
-	}
-	
-	
-	@Secured({"ROLE_SELLER","ROLE_ADMIN"})
-	@RequestMapping(value = "/category/save", method = RequestMethod.POST)
-	public ResponseEntity<ApiResponse<List<ProductCategory>>> saveProductCategory(
-			@RequestBody List<ProductCategory> category) {
-		ApiResponse<List<ProductCategory>> response = new ApiResponse<>();
-		try {
-			List<ProductCategory> savedProducts = productService.saveProductCategory(category);
-			response.setSuccess(true);
-			response.setData(savedProducts);
-			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
 
-    /* 
-     * API to fetch the products for the given product category
-     * @QueryParam Integer offset , Integer size, String sort, String category
-     * @return Product list
-     */	
+	@Secured({ "ROLE_SELLER", "ROLE_ADMIN" })
+	@RequestMapping(value = "/category/save", method = RequestMethod.POST)
+	public ResponseEntity<ApiResponse<List<ProductCategory>>> saveProductCategory(
+			@RequestBody List<ProductCategory> category) {
+		final ApiResponse<List<ProductCategory>> response = new ApiResponse<>();
+		try {
+			final List<ProductCategory> savedProducts = productService.saveProductCategory(category);
+			response.setSuccess(true);
+			response.setData(savedProducts);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (final Exception e) {
+			throw new AppException(e.getMessage());
+		}
+	}
+
+	/*
+	 * API to fetch the products for the given product category
+	 * 
+	 * @QueryParam Integer offset , Integer size, String sort, String category
+	 * 
+	 * @return Product list
+	 */
 	@RequestMapping(value = "/category/{category}", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getProductsByCategory(
 			@RequestParam(name = "offset", defaultValue = "0") int offset,
 			@RequestParam(name = "size", defaultValue = "25") int size,
 			@RequestParam(name = "sort", defaultValue = "name") String sort,
 			@PathVariable("category") String category) {
-		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
+		final ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
 		try {
-			List<ProductDisplay> products = productService.findCategoryProducts(offset, size, sort, category);
+			final List<ProductDisplay> products = productService.findCategoryProducts(offset, size, sort, category);
 			response.setSuccess(true);
 			response.setData(products);
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
-	
-	/* 
-     * API to fetch the products based on the search criteria
-     * @QueryParam Integer offset , Integer size, String sort, ProductSearch searchCriteria
-     * @return Product list
-     */	
+
+	/*
+	 * API to fetch the products based on the search criteria
+	 * 
+	 * @QueryParam Integer offset , Integer size, String sort, ProductSearch
+	 * searchCriteria
+	 * 
+	 * @return Product list
+	 */
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getProductsBykeyword(
 			@RequestParam(name = "offset", defaultValue = "0") int offset,
 			@RequestParam(name = "size", defaultValue = "25") int size,
 			@RequestParam(name = "sort", defaultValue = "name") String sort,
 			@RequestBody ProductSearchCriteria searchCriteria) {
-		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
+		final ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
 		try {
-			List<ProductDisplay> products = productService.SearchProducts(offset, size,sort,searchCriteria);
+			final List<ProductDisplay> products = productService.SearchProducts(offset, size, sort, searchCriteria);
 			response.setSuccess(true);
 			response.setData(products);
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
 
-    /* 
-     * API to fetch the full product detail based on productID
-     * @Param Long Id
-     * @return Product
-     */
+	/*
+	 * API to fetch the full product detail based on productID
+	 * 
+	 * @Param Long Id
+	 * 
+	 * @return Product
+	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<Product>> getFullProductDetailsById(@PathVariable("id") Long id) {
-		ApiResponse<Product> response = new ApiResponse<>();
+		final ApiResponse<Product> response = new ApiResponse<>();
 		try {
-			Product product = productService.findById(id);
+			final Product product = productService.findById(id);
 			response.setSuccess(true);
 			response.setData(product);
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			response.setSuccess(false);
 			response.setError(new ErrorResponse(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(), null,
 					e.getMessage()));
@@ -133,86 +140,88 @@ public class ProductController {
 
 	/*
 	 * API to fetch the related products detail based on productID
+	 * 
 	 * @Param Long Id
+	 * 
 	 * @return List<Products>
 	 */
 	@RequestMapping(value = "/related", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getByRelatedProducts(@RequestParam("id") Long id) {
-		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
+		final ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
 		try {
-			List<ProductDisplay> products = productService.getRelatedProducts(id);
+			final List<ProductDisplay> products = productService.getRelatedProducts(id);
 			response.setSuccess(true);
 			response.setData(products);
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
 
 	/*
 	 * API to fetch the recently added products
+	 * 
 	 * @return List<Products>
 	 */
 	@RequestMapping(value = "/recent", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getByNewlyAdded() {
-		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
+		final ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
 		try {
-			List<ProductDisplay> products = productService.findRecentlyAddedProduct();
+			final List<ProductDisplay> products = productService.findRecentlyAddedProduct();
 			response.setSuccess(true);
 			response.setData(products);
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
 
 	/*
 	 * API to fetch the most selling products
+	 * 
 	 * @return List<Products>
 	 */
 	@RequestMapping(value = "/mostselling", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<List<ProductDisplay>>> getByMostSelling() {
-		ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
+		final ApiResponse<List<ProductDisplay>> response = new ApiResponse<>();
 		try {
-			List<ProductDisplay> products = productService.findMostSellingProducts();
+			final List<ProductDisplay> products = productService.findMostSellingProducts();
 			response.setSuccess(true);
 			response.setData(products);
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
-	@Secured({"ROLE_SELLER","ROLE_ADMIN"})
+
+	@Secured({ "ROLE_SELLER", "ROLE_ADMIN" })
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public ResponseEntity<ApiResponse<List<Product>>> saveNewProduct(
-			@RequestBody List<Product> products) {
-		ApiResponse<List<Product>> response = new ApiResponse<>();
+	public ResponseEntity<ApiResponse<List<Product>>> saveNewProduct(@RequestBody List<Product> products) {
+		final ApiResponse<List<Product>> response = new ApiResponse<>();
 		try {
-			List<Product> savedProducts = productService.saveNewProduct(products);
+			final List<Product> savedProducts = productService.saveNewProduct(products);
 			response.setSuccess(true);
 			response.setData(savedProducts);
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
-	
-		@Secured({"ROLE_BUYER","ROLE_ADMIN"})
-		@RequestMapping(value = "/review/{pid}/save", method = RequestMethod.POST)
-	public ResponseEntity<ApiResponse<ProductReview>> saveProductReview(
-			@RequestBody ProductReview review,
-			@PathVariable ("pid") Long pid) {
-		ApiResponse<ProductReview> response = new ApiResponse<>();
+
+	@Secured({ "ROLE_BUYER", "ROLE_ADMIN" })
+	@RequestMapping(value = "/review/{pid}/save", method = RequestMethod.POST)
+	public ResponseEntity<ApiResponse<ProductReview>> saveProductReview(@RequestBody ProductReview review,
+			@PathVariable("pid") Long pid) {
+		final ApiResponse<ProductReview> response = new ApiResponse<>();
 		try {
-			MyUserDetail user = SecurityUtil.getUser();
-			ProductReview savedProducts = productService.saveProductReview(review, pid, user);
+			final MyUserDetail user = SecurityUtil.getUser();
+			final ProductReview savedProducts = productService.saveProductReview(review, pid, user);
 			response.setSuccess(true);
 			response.setData(savedProducts);
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
-		
-	
+
 }

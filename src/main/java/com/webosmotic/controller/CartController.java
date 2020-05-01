@@ -22,7 +22,7 @@ import com.webosmotic.util.SecurityUtil;
 
 @RestController
 @RequestMapping("/cart")
-@Secured({"ROLE_BUYER","ROLE_ADMIN"})
+@Secured({ "ROLE_BUYER", "ROLE_ADMIN" })
 public class CartController {
 
 	@Autowired
@@ -30,96 +30,102 @@ public class CartController {
 
 	/*
 	 * API to fetch the cart for the given user
-	 * 
+	 *
 	 * @return Cart object
 	 */
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<Cart>> fetchCartForUser() {
-		ApiResponse<Cart> response = new ApiResponse<>();
+		final ApiResponse<Cart> response = new ApiResponse<>();
 		try {
-			Cart cart = cartService.fecthUserCart(SecurityUtil.getUser());
+			final Cart cart = cartService.fecthUserCart(SecurityUtil.getUser());
 			response.setSuccess(true);
 			response.setData(cart);
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
 
 	/*
 	 * API to add the product to the cart for the given user
+	 * 
 	 * @PathVariable Long product id
+	 * 
 	 * @return Cart object
 	 */
 	@RequestMapping(value = "/product/{product_id}/add", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<Cart>> addNewProductToCart(@PathVariable("product_id") Long productId) {
-		ApiResponse<Cart> response = new ApiResponse<>();
+		final ApiResponse<Cart> response = new ApiResponse<>();
 		try {
-			MyUserDetail user = SecurityUtil.getUser();
-			if(user == null) {
+			final MyUserDetail user = SecurityUtil.getUser();
+			if (user == null) {
 				throw new NotFoundException("No LoggedIn user found");
 			}
-			Cart cart = cartService.addToCart(productId, user);
+			final Cart cart = cartService.addToCart(productId, user);
 			response.setSuccess(true);
 			response.setData(cart);
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
 
 	/*
 	 * API to update the product in the cart
+	 * 
 	 * @PathVariable ProductSummaryUpdateRequest object
+	 * 
 	 * @return Cart object
 	 */
 	@RequestMapping(value = "product/update", method = RequestMethod.POST)
-	public ResponseEntity<ApiResponse<Cart>> updateCartItem(
-			@RequestBody ProductSummaryUpdateRequest request) {
-		ApiResponse<Cart> response = new ApiResponse<>();
+	public ResponseEntity<ApiResponse<Cart>> updateCartItem(@RequestBody ProductSummaryUpdateRequest request) {
+		final ApiResponse<Cart> response = new ApiResponse<>();
 		try {
-			Cart cart = cartService.updateCartItemInCart(request);
+			final Cart cart = cartService.updateCartItemInCart(request);
 			response.setSuccess(true);
 			response.setData(cart);
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
-	 
+
 	/*
 	 * API to remove the product in the cart
+	 * 
 	 * @PathVariable ProductSummaryUpdateRequest object
+	 * 
 	 * @return Cart object
 	 */
 	@RequestMapping(value = "cartitem/remove/{id}", method = RequestMethod.GET)
-	public ResponseEntity<ApiResponse<Cart>> removeProductFromCart(
-			@PathVariable("id") Long id) {
-		ApiResponse<Cart> response = new ApiResponse<>();
+	public ResponseEntity<ApiResponse<Cart>> removeProductFromCart(@PathVariable("id") Long id) {
+		final ApiResponse<Cart> response = new ApiResponse<>();
 		try {
-			Cart cart = cartService.removeProductFromCart(id);
+			final Cart cart = cartService.removeProductFromCart(id);
 			response.setSuccess(true);
 			response.setData(cart);
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
 
 	/*
 	 * API to checkout the product from the cart and create an order
+	 * 
 	 * @PathVariable Long Cart_Id
-	 * @return OrderID 
+	 * 
+	 * @return OrderID
 	 */
 	@RequestMapping(value = "/checkout/{id}", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponse<CartCheckOutResponse>> cartCheckOut(@PathVariable("id") Long cartId) {
-		ApiResponse<CartCheckOutResponse> response = new ApiResponse<>();
+		final ApiResponse<CartCheckOutResponse> response = new ApiResponse<>();
 		try {
-			CartCheckOutResponse checkout = cartService.createOrderForCart(SecurityUtil.getUser(), cartId);
+			final CartCheckOutResponse checkout = cartService.createOrderForCart(SecurityUtil.getUser(), cartId);
 			response.setSuccess(true);
 			response.setData(checkout);
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}

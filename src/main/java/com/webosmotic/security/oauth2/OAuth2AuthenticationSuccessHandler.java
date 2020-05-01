@@ -46,7 +46,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
-		String targetUrl = determineTargetUrl(request, response, authentication);
+		final String targetUrl = determineTargetUrl(request, response, authentication);
 
 		if (response.isCommitted()) {
 			logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
@@ -58,9 +58,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		getRedirectStrategy().sendRedirect(request, response, targetUrl);
 	}
 
+	@Override
 	protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) {
-		Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
+		final Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
 				.map(Cookie::getValue);
 
 		if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
@@ -68,9 +69,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 					"Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
 		}
 
-		String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+		final String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-		String token = tokenProvider.generate(authentication);
+		final String token = tokenProvider.generate(authentication);
 
 		return UriComponentsBuilder.fromUriString(targetUrl).queryParam("token", token).build().toUriString();
 	}
@@ -81,11 +82,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 	}
 
 	private boolean isAuthorizedRedirectUri(String uri) {
-		URI clientRedirectUri = URI.create(uri);
+		final URI clientRedirectUri = URI.create(uri);
 
 		return appProperties.getOauth2().getAuthorizedRedirectUris().stream().anyMatch(authorizedRedirectUri -> {
-			// Only validate host and port. Let the clients use different paths 
-			URI authorizedURI = URI.create(authorizedRedirectUri);
+			// Only validate host and port. Let the clients use different paths
+			final URI authorizedURI = URI.create(authorizedRedirectUri);
 			if (authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
 					&& authorizedURI.getPort() == clientRedirectUri.getPort()) {
 				return true;

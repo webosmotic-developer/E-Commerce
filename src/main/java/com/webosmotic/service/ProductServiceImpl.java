@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -42,56 +41,57 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<ProductDisplay> fetchShowProducts() {
 		try {
-			List<Product> products = productRepository.findByShowTagOrderByNameAsc(true);
+			final List<Product> products = productRepository.findByShowTagOrderByNameAsc(true);
 			return AppUtil.createProductDisplay(products);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<ProductDisplay> findCategoryProducts(int offset, int size, String sort, String category) {
 		try {
-			Pageable pageRequest = PageRequest.of(offset, size, Sort.by(sort));
-			ProductSearchCriteria searchCriteria=new ProductSearchCriteria(category);
-			Specification specification = ProductSpecification.findBySearchCriteria(searchCriteria);
-			Page<Product> pageProducts = productRepository.findAll(specification,pageRequest);
-			List<Product> products=pageProducts.getContent();
+			final Pageable pageRequest = PageRequest.of(offset, size, Sort.by(sort));
+			final ProductSearchCriteria searchCriteria = new ProductSearchCriteria(category);
+			final Specification specification = ProductSpecification.findBySearchCriteria(searchCriteria);
+			final Page<Product> pageProducts = productRepository.findAll(specification, pageRequest);
+			final List<Product> products = pageProducts.getContent();
 			if (!products.isEmpty() && products.size() > 0) {
 				return AppUtil.createProductDisplay(products);
 			} else {
 				return Collections.emptyList();
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 
 		}
 
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public List<ProductDisplay> SearchProducts(int offset, int size,String sort,ProductSearchCriteria searchCriteria) {
+	public List<ProductDisplay> SearchProducts(int offset, int size, String sort,
+			ProductSearchCriteria searchCriteria) {
 		try {
-			Pageable pageRequest = PageRequest.of(offset, size, Sort.by(sort));
-			Specification specification = ProductSpecification.findBySearchCriteria(searchCriteria);
-			Page<Product> pageProducts = productRepository.findAll(specification,pageRequest);
-			List<Product> products=pageProducts.getContent();
+			final Pageable pageRequest = PageRequest.of(offset, size, Sort.by(sort));
+			final Specification specification = ProductSpecification.findBySearchCriteria(searchCriteria);
+			final Page<Product> pageProducts = productRepository.findAll(specification, pageRequest);
+			final List<Product> products = pageProducts.getContent();
 			if (!products.isEmpty() && products.size() > 0) {
 				return AppUtil.createProductDisplay(products);
 			} else {
 				return Collections.emptyList();
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 
 		}
 	}
-	
+
 	@Override
 	public Product findById(Long id) {
-		Optional<Product> productOpt = productRepository.findById(id);
+		final Optional<Product> productOpt = productRepository.findById(id);
 		if (productOpt.isPresent()) {
 			return productOpt.get();
 		} else {
@@ -102,17 +102,18 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<ProductDisplay> getRelatedProducts(Long id) {
 		try {
-			Optional<Product> productOpt = productRepository.findById(id);
+			final Optional<Product> productOpt = productRepository.findById(id);
 			if (!productOpt.isPresent()) {
 				throw new NotFoundException("No product found for the given productId: " + id);
 			}
-			ProductCategory category = productOpt.get().getProductCategory();
+			final ProductCategory category = productOpt.get().getProductCategory();
 			if (category == null) {
 				throw new NotFoundException("No product category found for the given productId: " + id);
 			}
-			List<Product> products = productRepository.findByProductCategoryAndIdNotOrderBySellCountDesc(category, id);
+			final List<Product> products = productRepository.findByProductCategoryAndIdNotOrderBySellCountDesc(category,
+					id);
 			return AppUtil.createProductDisplay(products);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
@@ -120,9 +121,9 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<ProductDisplay> findRecentlyAddedProduct() {
 		try {
-			List<Product> products = productRepository.findTop8ByOrderByCreatedAtDesc();
+			final List<Product> products = productRepository.findTop8ByOrderByCreatedAtDesc();
 			return AppUtil.createProductDisplay(products);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw e;
 		}
 	}
@@ -130,9 +131,9 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<ProductDisplay> findMostSellingProducts() {
 		try {
-			List<Product> products = productRepository.findTop8ByOrderBySellCountDesc();
+			final List<Product> products = productRepository.findTop8ByOrderBySellCountDesc();
 			return AppUtil.createProductDisplay(products);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw e;
 		}
 	}
@@ -140,21 +141,21 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> saveNewProduct(List<Product> products) {
 		try {
-			
-			
-			List<Product> savedProducts = new ArrayList<Product>();
+
+			final List<Product> savedProducts = new ArrayList<Product>();
 			products.forEach(p -> {
 
-				ProductCategory pcategory = p.getProductCategory();
-				
-				ProductCategory existingCategory = productCategoryRepository.findByParentCategoryAndSubCategory(pcategory.getParentCategory(), pcategory.getSubCategory());
-				if(existingCategory != null) {
+				final ProductCategory pcategory = p.getProductCategory();
+
+				final ProductCategory existingCategory = productCategoryRepository
+						.findByParentCategoryAndSubCategory(pcategory.getParentCategory(), pcategory.getSubCategory());
+				if (existingCategory != null) {
 					p.setProductCategory(existingCategory);
 				}
 				savedProducts.add(productRepository.save(p));
 			});
 			return savedProducts;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw e;
 		}
 	}
@@ -162,12 +163,12 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<ProductCategory> saveProductCategory(List<ProductCategory> category) {
 		try {
-			List<ProductCategory> savedProducts = new ArrayList<>();
+			final List<ProductCategory> savedProducts = new ArrayList<>();
 			category.forEach(p -> {
 				savedProducts.add(productCategoryRepository.save(p));
 			});
 			return savedProducts;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw e;
 		}
 	}
@@ -175,7 +176,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductReview saveProductReview(ProductReview review, Long pid, MyUserDetail user) {
 		try {
-			Optional<Product> productOpt = productRepository.findById(pid);
+			final Optional<Product> productOpt = productRepository.findById(pid);
 			if (!productOpt.isPresent()) {
 				throw new NotFoundException("No product foud for the given productId: " + pid);
 			}
@@ -183,7 +184,7 @@ public class ProductServiceImpl implements ProductService {
 			review.setProduct(productOpt.get());
 			review.setReviewerName(user.getUsername());
 			return productReviewRepository.save(review);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 

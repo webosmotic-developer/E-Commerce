@@ -14,24 +14,24 @@ public class RestGlobalExceptionHandler {
 
 	@ExceptionHandler
 	public ResponseEntity<ErrorResponse> handleException(BadRequestException exp) {
-		ErrorResponse response = createErrorResponse(exp, HttpStatus.BAD_REQUEST.value());
+		final ErrorResponse response = createErrorResponse(exp, HttpStatus.BAD_REQUEST.value());
 		return new ResponseEntity<ErrorResponse>(response, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler
 	public ResponseEntity<ErrorResponse> handleException(UserNotFoundException exp) {
-		ErrorResponse response = createErrorResponse(exp, HttpStatus.NOT_FOUND.value());
+		final ErrorResponse response = createErrorResponse(exp, HttpStatus.NOT_FOUND.value());
 		return new ResponseEntity<ErrorResponse>(response, HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler
 	public ResponseEntity<ErrorResponse> handleException(AppException exp) {
-		ErrorResponse response = createErrorResponse(exp, HttpStatus.INTERNAL_SERVER_ERROR.value());
+		final ErrorResponse response = createErrorResponse(exp, HttpStatus.INTERNAL_SERVER_ERROR.value());
 		return new ResponseEntity<ErrorResponse>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	private ErrorResponse createErrorResponse(Exception exp, int status) {
-		ErrorResponse response = new ErrorResponse();
+		final ErrorResponse response = new ErrorResponse();
 		response.setStatus(status);
 		response.setMessage(exp.getMessage());
 		response.setTimeStamp(LocalDateTime.now());

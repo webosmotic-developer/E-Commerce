@@ -18,7 +18,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public void addCoupons(List<Coupon> coupons) {
-		for (Coupon coupon : coupons) {
+		for (final Coupon coupon : coupons) {
 			if (coupon.getType().equals(CouponType.Fixed)) {
 				if (coupon.getFlatDiscount() == 0) {
 					throw new NotFoundException("FlatDiscount cant be zero for type Fixed");

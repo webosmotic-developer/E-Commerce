@@ -8,10 +8,8 @@ import com.webosmotic.Enum.TokenType;
 import com.webosmotic.entity.VerificationToken;
 
 public interface VerificationtokenRepository extends JpaRepository<VerificationToken, Long> {
-	
+
 	@Query(value = "Select v from VerificationToken v where v.token = :token and v.tokenType = :type")
 	VerificationToken getByToken(@Param("token") String token, @Param("type") TokenType type);
-	
-	
 
 }

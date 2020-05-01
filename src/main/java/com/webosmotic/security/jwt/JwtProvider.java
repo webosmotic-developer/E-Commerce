@@ -1,12 +1,14 @@
 package com.webosmotic.security.jwt;
 
 import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -26,13 +28,15 @@ public class JwtProvider {
 
 	/*
 	 * method to generate the JWT token.
+	 * 
 	 * @Param Authentication Object from the spring security
+	 * 
 	 * @Return JWT token
 	 */
 	public String generate(Authentication authentication) {
 		String username = null;
 		if (authentication.getPrincipal() instanceof UserDetails) {
-			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+			final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 			username = userDetails.getUsername();
 		} else {
 			username = authentication.getName();
@@ -45,14 +49,16 @@ public class JwtProvider {
 
 	/*
 	 * method to validate the JWT
+	 * 
 	 * @Param JWT token
+	 * 
 	 * @Return boolean
 	 */
 	public boolean validate(String token) {
 		try {
 			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
 			return true;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			logger.error("JWT Authentication Failed");
 		}
 		return false;
@@ -60,7 +66,9 @@ public class JwtProvider {
 
 	/*
 	 * method to extract the userName detail from the JWT token
+	 * 
 	 * @Param JWT token
+	 * 
 	 * @Return boolean
 	 */
 	public String getUserName(String token) {

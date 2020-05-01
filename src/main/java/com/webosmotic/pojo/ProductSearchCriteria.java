@@ -18,24 +18,24 @@ public class ProductSearchCriteria {
 	private int minDiscount;
 	private int maxDiscount;
 	private String all;
-	
+
 	public ProductSearchCriteria() {
 		super();
 	}
-	
+
 	public ProductSearchCriteria(String category) {
-		this.subCategory="";
-		this.category=category;
-		this.name="";
-		this.brand="";
-		this.description="";
-		this.discount=0;
-		this.unitPrice=0;
-		this.minDiscount=0;
-		this.maxDiscount=0;
-		this.all="";
-		this.minPrice=0;
-		this.maxPrice=0;
+		this.subCategory = "";
+		this.category = category;
+		this.name = "";
+		this.brand = "";
+		this.description = "";
+		this.discount = 0;
+		this.unitPrice = 0;
+		this.minDiscount = 0;
+		this.maxDiscount = 0;
+		this.all = "";
+		this.minPrice = 0;
+		this.maxPrice = 0;
 	}
 
 	public String getName() {
@@ -94,7 +94,6 @@ public class ProductSearchCriteria {
 		this.maxPrice = maxPrice;
 	}
 
-
 	public String getDescription() {
 		return description;
 	}
@@ -118,6 +117,7 @@ public class ProductSearchCriteria {
 	public void setUnitPrice(int unitPrice) {
 		this.unitPrice = unitPrice;
 	}
+
 	public int getMinDiscount() {
 		return minDiscount;
 	}

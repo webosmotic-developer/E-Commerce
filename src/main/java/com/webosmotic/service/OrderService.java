@@ -9,7 +9,7 @@ public interface OrderService {
 	void UpdateShippingAddress(Long addressId, Long orderId);
 
 	void createAndSaveAddress(MyUserDetail user, Address address, Long orderId);
-	
+
 	Order applyCoupon(String CouponName, Long orderId);
 
 	Order removeCoupon(Long orderId);

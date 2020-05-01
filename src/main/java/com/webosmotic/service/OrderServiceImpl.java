@@ -21,7 +21,7 @@ import com.webosmotic.repository.UserRepository;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-	
+
 	@Autowired
 	OrderRepository orderRespository;
 	@Autowired
@@ -34,12 +34,12 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public void UpdateShippingAddress(Long addressId, Long orderId) {
 		try {
-			Optional<Address> addressOpt = addressRepository.findById(addressId);
+			final Optional<Address> addressOpt = addressRepository.findById(addressId);
 			if (!addressOpt.isPresent()) {
 				throw new NotFoundException("No Address found for the given " + addressId);
 			}
 			saveAddressInOrder(addressOpt.get(), orderId);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new AppException(e.getMessage());
 		}
 	}
@@ -47,76 +47,77 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public void createAndSaveAddress(MyUserDetail myUser, Address address, Long orderId) {
 		try {
-			User user = userRepository.findByUsernameAndEmail(myUser.getUsername(), myUser.getEmail());
+			final User user = userRepository.findByUsernameAndEmail(myUser.getUsername(), myUser.getEmail());
 			address.setUser(user);
-			Address savedAddress = addressRepository.save(address);
+			final Address savedAddress = addressRepository.save(address);
 			saveAddressInOrder(savedAddress, orderId);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw e;
 		}
 	}
 
 	private Order saveAddressInOrder(Address Address, Long orderId) {
-		Optional<Order> orderOpt = orderRespository.findById(orderId);
+		final Optional<Order> orderOpt = orderRespository.findById(orderId);
 		if (!orderOpt.isPresent()) {
 			throw new NotFoundException("No Order found for the given orderId" + orderId);
 		}
-		Order order = orderOpt.get();
+		final Order order = orderOpt.get();
 		order.setShippingAddress(Address);
 		return orderRespository.save(order);
 	}
-	
+
+	@Override
 	public Order applyCoupon(String couponName, Long orderId) {
 		try {
-			Optional<Coupon> couponOpt = couponRepository.findByCouponName(couponName);
+			final Optional<Coupon> couponOpt = couponRepository.findByCouponName(couponName);
 			if (!couponOpt.isPresent()) {
 				throw new AppException("Invalid coupon");
 			}
-			Coupon coupon=couponOpt.get();
-			if(coupon.getExpiryDate().isBefore(LocalDate.now())) {
+			final Coupon coupon = couponOpt.get();
+			if (coupon.getExpiryDate().isBefore(LocalDate.now())) {
 				throw new AppException("Expired coupon");
 			}
-			Optional<Order> orderOpt = orderRespository.findById(orderId);
+			final Optional<Order> orderOpt = orderRespository.findById(orderId);
 			if (!orderOpt.isPresent()) {
 				throw new NotFoundException("No Order found for the given orderId" + orderId);
 			}
-			Order order = orderOpt.get();
-			if(order.getCoupon()!=null) {
+			final Order order = orderOpt.get();
+			if (order.getCoupon() != null) {
 				throw new AppException("One coupon is already applied");
 			}
-			
-			if(coupon.getMinOrderValue()>order.getOrderTotal()) {
-				throw new AppException("Minimun Order value "+coupon.getMinOrderValue()+" not reached");
+
+			if (coupon.getMinOrderValue() > order.getOrderTotal()) {
+				throw new AppException("Minimun Order value " + coupon.getMinOrderValue() + " not reached");
 			}
-			
-			if(coupon.getType().equals(CouponType.Fixed)) {
+
+			if (coupon.getType().equals(CouponType.Fixed)) {
 				order.setCouponDiscount(coupon.getFlatDiscount());
 			}
-			if(coupon.getType().equals(CouponType.Discount)) {
-				float discount=(order.getPayableAmount()*coupon.getDiscount())/100;
-				if(discount>coupon.getMaxDiscount()) {
+			if (coupon.getType().equals(CouponType.Discount)) {
+				final float discount = (order.getPayableAmount() * coupon.getDiscount()) / 100;
+				if (discount > coupon.getMaxDiscount()) {
 					order.setCouponDiscount(coupon.getMaxDiscount());
-				}else {
+				} else {
 					order.setCouponDiscount(discount);
 				}
 			}
-			order.setPayableAmount(order.getPayableAmount()-order.getCouponDiscount());
+			order.setPayableAmount(order.getPayableAmount() - order.getCouponDiscount());
 			order.setCoupon(coupon);
 			orderRespository.save(order);
 			return order;
-			} catch (Exception e) {
+		} catch (final Exception e) {
 			throw e;
 		}
 	}
-	
+
 	@Override
 	public Order removeCoupon(Long orderId) {
-		Optional<Order> orderOpt = orderRespository.findById(orderId);
+		final Optional<Order> orderOpt = orderRespository.findById(orderId);
 		if (!orderOpt.isPresent()) {
 			throw new NotFoundException("No Order found for the given orderId" + orderId);
 		}
-		Order order = orderOpt.get();
-		order.setPayableAmount(order.getPayableAmount()+order.getCouponDiscount());
+		final Order order = orderOpt.get();
+		order.setPayableAmount(order.getPayableAmount() + order.getCouponDiscount());
 		order.setCoupon(null);
 		order.setCouponDiscount(0);
 		orderRespository.save(order);

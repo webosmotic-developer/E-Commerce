@@ -4,22 +4,22 @@ import com.webosmotic.Enum.RoleType;
 
 /**
  * class to describe the response for the user login.
- * 
+ *
  */
 public class LoginResponse {
-	
-    private String token;
-    private String type = "Bearer";
-    private String email;
-    private String name;
-    private RoleType role;
 
-    public LoginResponse(String token, String email, String name, RoleType role) {
-        this.email = email;
-        this.name = name;
-        this.token = token;
-        this.role = role;
-    }
+	private String token;
+	private String type = "Bearer";
+	private String email;
+	private String name;
+	private RoleType role;
+
+	public LoginResponse(String token, String email, String name, RoleType role) {
+		this.email = email;
+		this.name = name;
+		this.token = token;
+		this.role = role;
+	}
 
 	public String getToken() {
 		return token;
@@ -36,8 +36,6 @@ public class LoginResponse {
 	public void setType(String type) {
 		this.type = type;
 	}
-
-	
 
 	public String getName() {
 		return name;

@@ -18,7 +18,9 @@ public class RoleServiceImpl implements RoleService {
 
 	/*
 	 * Method to find the Role object for the given role name .
+	 * 
 	 * @Param String roleName
+	 * 
 	 * @Return Role object
 	 */
 	@Override

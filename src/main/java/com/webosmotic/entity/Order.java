@@ -22,7 +22,6 @@ import org.hibernate.annotations.NaturalId;
 
 import com.webosmotic.Enum.OrderStatus;
 
-
 @Entity
 @AttributeOverride(name = "id", column = @Column(name = "order_id"))
 @Table(name = "orders")
@@ -58,10 +57,10 @@ public class Order extends UserAudit implements Serializable {
 	private float payableAmount;
 
 	private LocalDate deliveryDate;
-	
+
 	@ManyToOne
 	private Coupon coupon;
-	
+
 	private float couponDiscount;
 
 	public String getOrderNumber() {
@@ -159,5 +158,5 @@ public class Order extends UserAudit implements Serializable {
 	public void setCouponDiscount(float couponDiscount) {
 		this.couponDiscount = couponDiscount;
 	}
-	
+
 }

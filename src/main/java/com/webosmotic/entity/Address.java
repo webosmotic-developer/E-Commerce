@@ -10,14 +10,14 @@ import javax.persistence.ManyToOne;
 
 /**
  * Address is the main entity used for storing the user Shipping Address
- * 
+ *
  */
 
 @Entity
 public class Address extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private String address;
 	private String city;
 	private String state;
@@ -28,7 +28,8 @@ public class Address extends BaseEntity implements Serializable {
 	private Boolean isDefault;
 	private String addressType;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,
+			CascadeType.DETACH })
 	@JoinColumn(name = "user_id")
 	private User user;
 

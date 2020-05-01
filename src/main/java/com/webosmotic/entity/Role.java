@@ -18,7 +18,8 @@ import com.webosmotic.Enum.RoleType;
 @AttributeOverride(name = "id", column = @Column(name = "role_id"))
 public class Role extends BaseEntity implements Serializable {
 
-	public Role() {}
+	public Role() {
+	}
 
 	private static final long serialVersionUID = 1L;
 

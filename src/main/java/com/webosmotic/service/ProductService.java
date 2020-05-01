@@ -31,5 +31,4 @@ public interface ProductService {
 
 	ProductReview saveProductReview(ProductReview review, Long pid, MyUserDetail user);
 
-
 }

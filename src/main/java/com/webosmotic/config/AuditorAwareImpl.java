@@ -18,7 +18,7 @@ public class AuditorAwareImpl implements AuditorAware<Long> {
 
 	@Override
 	public Optional<Long> getCurrentAuditor() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		/*
 		 * if (authentication == null || !authentication.isAuthenticated() ||
@@ -26,7 +26,7 @@ public class AuditorAwareImpl implements AuditorAware<Long> {
 		 * Optional.empty(); }
 		 */
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-			MyUserDetail userPrincipal = (MyUserDetail) authentication.getPrincipal();
+			final MyUserDetail userPrincipal = (MyUserDetail) authentication.getPrincipal();
 			logger.info("userPrincipal" + " " + userPrincipal.getId());
 
 			if (userPrincipal != null && userPrincipal.getId() != null) {
